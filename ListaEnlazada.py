@@ -33,3 +33,4 @@ class ListaEnlazada:
         n_ant.prox = n_act.prox
     self.len -= 1
     return dato
+estsetsfsklfalkdfgnñzgb 
