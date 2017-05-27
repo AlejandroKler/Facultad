@@ -3,9 +3,9 @@ class Cancion():
 
 	def __init__(self):
         """Crea una instancia de la clase."""
-        self.tiempos = ListaEnlazada() # Marcas de tiempo
-        self.tracks = [] # Lista de tracks
-	self.cursor = _IteradorListaEnlazada(self.tiempos.prim)
+		self.tiempos = ListaEnlazada() # Marcas de tiempo
+		self.tracks = [] # Lista de tracks
+		self.cursor = _IteradorListaEnlazada(self.tiempos.prim)
     
     def load(self,file):
     	"""Carga la cancion desde el archivo. Reemplaza la cancion en edicion
