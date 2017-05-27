@@ -1,3 +1,13 @@
+class _IteradorListaEnlazada:
+    """Itera una instancia de la clase ListaEnlazada"""
+    def __init__(self, prim):
+        self.actual = prim
+    def __next__(self):
+        if self.actual is None:
+            raise StopIteration()
+        dato = self.actual.dato
+        self.actual = self.actual.prox
+        return dato
 
 class _Nodo:
     def __init__(self, dato = None, prox = None):
