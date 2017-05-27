@@ -1,70 +1,89 @@
 class Cancion():
 	"""Descripcion"""
-	
-	def __init__(self):
-        """Crea una lista enlazada vacía."""
-        # referencia al primer nodo (None si la lista está vacía)
-        self.prim = None
-        # cantidad de elementos de la lista
-        self.len = 0
-        return self
-    
-    def pop(self, i=None):
-        """Elimina el nodo de la posición i, y devuelve el dato contenido.
-        3 Si i está fuera de rango, se levanta la excepción IndexError.
-        4 Si no se recibe la posición, devuelve el último elemento."""
-        if i is None:
-            i = self.len - 1
-        if i < 0 or i >= self.len:
-            raise IndexError("Índice fuera de rango")
-        if i == 0:
-            # Caso particular: saltear la cabecera de la lista
-            dato = self.prim.dato
-            self.prim = self.prim.prox
-        else:
-            # Buscar los nodos en las posiciones (i-1) e (i)
-            n_ant = self.prim
-            n_act = n_ant.prox
-            for pos in range(1, i):
-                n_ant = n_act
-                n_act = n_ant.prox
-            # Guardar el dato y descartar el nodo
-            dato = n_act.dato
-            n_ant.prox = n_act.prox
-        self.len -= 1
-        return dato
 
-    def remove(self, x):
-        """Borra la primera aparición del valor x en la lista.
-         Si x no está en la lista, levanta ValueError"""
-        if self.len == 0:
-            raise ValueError("Lista vacía")
-        if self.prim.dato == x:
-            self.prim = self.prim.prox
-        else:
-            n_ant = self.prim
-            n_act = n_ant.prox
-        while n_act is not None and n_act.dato != x:
-            n_ant = n_act
-            n_act = n_ant.prox
-        if n_act == None:
-            raise ValueError("El valor no está en la lista.")
-            n_ant.prox = n_act.prox
-        self.len -= 1
-        
-    def insert(self, i, x):
-        """Inserta el elemento x en la posición i.
-        Si la posición es inválida, levanta IndexError"""
-        if i < 0 or i > self.len:
-            raise IndexError("Posición inválida")
-        nuevo = _Nodo(x)
-        if i == 0:
-            nuevo.prox = self.prim
-            self.prim = nuevo
-        else:
-            n_ant = self.prim
-            for pos in range(1, i):
-                n_ant = n_ant.prox
-            nuevo.prox = n_ant.prox
-            n_ant.prox = nuevo
-        self.len += 1
+	def __init__(self):
+        """Crea una istancia de la clase."""
+        self.tiempos = ListaEnlazada() # Marcas de tiempo
+        self.tracks = [] # Lista de tracks
+    
+    def load(self,file):
+    	"""Carga la cancion desde el archivo. Reemplaza la cancion en edicion
+		actual si es que la hay."""
+		pass
+
+	def store(self):
+    	"""Guarda la cancion"""
+		pass
+
+	def step(self,file):
+    	"""Avanza a la siguiente marca de tiempo."""
+		pass
+
+	def stepm(self,n):
+    	"""Avanza N marcas de tiempo hacia adelante."""
+		pass
+
+	def back(self):
+    	"""Retrocede a la anterior marca de tiempo"""
+		pass
+
+	def backm(self,n):
+    	"""Retrocede N marcas de tiempo hacia atras."""
+		pass
+
+	def track_add(self,funcion,frecuencia,volumen):
+    	"""Agrega un track con el sonido indicado."""
+		self.tracks.append([funcion,frecuencia,volumen])
+
+	def track_del(self,posicion = None):
+    	"""Elimina un track por numero."""
+		self.tracks.pop(posicion)
+
+	def mark_add(self,duracion):
+    	"""Agrega una marca de tiempo de la duracion establecida. Originalmente
+		todos los tracks arrancan como deshabilitados"""
+		pass
+
+	def mark_add_next(self,duracion):
+    	"""Igual que MARKADD pero la inserta luego de la marca en la cual esta
+		actualmente el cursor"""
+		pass
+
+	def mark_add_prev(self,duracion):
+    	"""Igual que MARKADD pero la inserta antes de la marca en la cual esta
+		actualmente el cursor"""
+		pass
+
+	def track_on(self,numero):
+    	"""Habilita al track durante la marca de tiempo en la cual esta parada el
+		cursor."""
+		pass
+
+	def track_off(self,numero):
+    	"""Deshabilita al track durante la marca de tiempo en la cual esta parada el
+		cursor."""
+		pass
+
+	def play(self):
+    	"""Reproduce la marca en la que se encuentra el cursor actualmente."""
+		pass
+
+	def play_all(self):
+    	"""Reproduce la cancion completa desde el inicio."""
+		pass
+
+	def play_marks(self,n):
+    	"""Reproduce las proximas n marcas desde la posicion actual del cursor."""
+		pass
+
+	def play_seconds(self,n):
+    	"""Reproduce los proximos N segundos la posicion actual del cursor. Si
+		alguna marca dura mas del tiempo restante, la reproduccion se corta
+		antes."""
+		
+
+
+
+	def track_len(self):
+		""" Obtiene la cantidad de tracks cargados"""
+		return len(self.tracks)
