@@ -8,10 +8,6 @@ class _IteradorListaEnlazada:
 		dato = self.actual.dato
 		self.actual = self.actual.prox
 		return dato
-	
-def __iter__(self):
-	"""Devuelve un iterador de la lista."""
-	return _IteradorListaEnlazada(self.prim)
 
 class _Nodo:
 	def __init__(self, dato = None, prox = None):
@@ -30,7 +26,6 @@ class ListaEnlazada:
         self.prim = None
         # cantidad de elementos de la lista
         self.len = 0
-        return self
     
 	def pop(self, i=None):
 		"""Elimina el nodo de la posición i, y devuelve el dato contenido.
@@ -104,3 +99,8 @@ class ListaEnlazada:
 				n_act = n_act.prox
 			n_act.prox = nuevo
 		self.len += 1
+		
+		
+	def __iter__(self):
+		"""Devuelve un iterador de la lista."""
+		return _IteradorListaEnlazada(self.prim)
