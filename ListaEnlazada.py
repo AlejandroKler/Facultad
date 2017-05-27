@@ -89,3 +89,15 @@ class ListaEnlazada:
     def __iter__(self):
         """Devuelve un iterador de la lista."""
         return _IteradorListaEnlazada(self.prim)
+    def append(self,x):
+		nuevo = _Nodo(x)
+		if self.len == 0:
+			self.prim = nuevo
+		if self.len == 1:
+			self.prim.prox = nuevo
+		if self.len != 0 and self.len != 1:
+			n_act = self.prim
+			for pos in range(1,self.len):
+				n_act = n_act.prox
+			n_act.prox = nuevo
+		self.len += 1
