@@ -3,12 +3,14 @@ class _IteradorListaEnlazada:
 	def __init__(self, prim):
 		self.actual = prim
 		self.pila_auxiliar = Pila()
+		self.posicion = 0
 	def next(self):
 		if self.actual.prox is None:
 			raise StopIteration('No hay más elementos en la lista')
 		dato = self.actual
 		self.pila_auxiliar.apilar(dato)
 		self.actual = self.actual.prox
+		self.posicion += 1
 		return self.actual.dato
 	def prev(self):
 		if not self.pila_auxiliar.esta_vacia():
@@ -16,6 +18,7 @@ class _IteradorListaEnlazada:
 			self.actual = dato
 		else:
 			raise StopIteration('No hay elemento previo')
+		self.posicion -= 1
 		return self.actual.dato
 			
 class ListaEnlazada:
