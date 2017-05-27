@@ -98,9 +98,6 @@ class Cancion():
 		alguna marca dura mas del tiempo restante, la reproduccion se corta
 		antes."""
 		
-
-
-
 	def track_len(self):
 		""" Obtiene la cantidad de tracks cargados"""
 		return len(self.tracks)
