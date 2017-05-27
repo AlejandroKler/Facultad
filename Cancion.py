@@ -5,6 +5,7 @@ class Cancion():
         """Crea una instancia de la clase."""
         self.tiempos = ListaEnlazada() # Marcas de tiempo
         self.tracks = [] # Lista de tracks
+	self.cursor = _IteradorListaEnlazada(self.tiempos.prim)
     
     def load(self,file):
     	"""Carga la cancion desde el archivo. Reemplaza la cancion en edicion
@@ -17,21 +18,21 @@ class Cancion():
 
 	def step(self,file):
     	"""Avanza a la siguiente marca de tiempo."""
-		self.tiempos.next()
+		self.cursor.next()
 
 	def stepm(self,n):
     	"""Avanza N marcas de tiempo hacia adelante."""
 		for x in range(0,n):
-			self.tiempos.next()
+			self.cursor.next()
 
 	def back(self):
     	"""Retrocede a la anterior marca de tiempo"""
-		self.tiempos.prev()
+		self.cursor.prev()
 
 	def backm(self,n):
     	"""Retrocede N marcas de tiempo hacia atras."""
 		for x in range(0,n):
-			self.tiempos.prev()
+			self.cursor.prev()
 
 	def track_add(self,funcion,frecuencia,volumen):
     	"""Agrega un track con el sonido indicado."""
