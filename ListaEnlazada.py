@@ -1,3 +1,4 @@
+from Pila import Pila
 class _IteradorListaEnlazada:
 	"""Itera una instancia de la clase ListaEnlazada"""
 	def __init__(self, prim):
