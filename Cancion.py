@@ -2,7 +2,7 @@ class Cancion():
 	"""Descripcion"""
 
 	def __init__(self):
-        """Crea una istancia de la clase."""
+        """Crea una instancia de la clase."""
         self.tiempos = ListaEnlazada() # Marcas de tiempo
         self.tracks = [] # Lista de tracks
     
@@ -17,19 +17,21 @@ class Cancion():
 
 	def step(self,file):
     	"""Avanza a la siguiente marca de tiempo."""
-		pass
+		self.tiempos.next()
 
 	def stepm(self,n):
     	"""Avanza N marcas de tiempo hacia adelante."""
-		pass
+		for x in range(0,n):
+			self.tiempos.next()
 
 	def back(self):
     	"""Retrocede a la anterior marca de tiempo"""
-		pass
+		self.tiempos.prev()
 
 	def backm(self,n):
     	"""Retrocede N marcas de tiempo hacia atras."""
-		pass
+		for x in range(0,n):
+			self.tiempos.prev()
 
 	def track_add(self,funcion,frecuencia,volumen):
     	"""Agrega un track con el sonido indicado."""
@@ -42,12 +44,12 @@ class Cancion():
 	def mark_add(self,duracion):
     	"""Agrega una marca de tiempo de la duracion establecida. Originalmente
 		todos los tracks arrancan como deshabilitados"""
-		pass
+		mark = MarcaDeTiempo(duracion)
+		self.tiempos.append(mark)
 
 	def mark_add_next(self,duracion):
     	"""Igual que MARKADD pero la inserta luego de la marca en la cual esta
 		actualmente el cursor"""
-		pass
 
 	def mark_add_prev(self,duracion):
     	"""Igual que MARKADD pero la inserta antes de la marca en la cual esta
@@ -57,7 +59,6 @@ class Cancion():
 	def track_on(self,numero):
     	"""Habilita al track durante la marca de tiempo en la cual esta parada el
 		cursor."""
-		pass
 
 	def track_off(self,numero):
     	"""Deshabilita al track durante la marca de tiempo en la cual esta parada el
