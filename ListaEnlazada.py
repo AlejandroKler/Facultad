@@ -86,3 +86,6 @@ class ListaEnlazada:
             nuevo.prox = n_ant.prox
             n_ant.prox = nuevo
         self.len += 1
+    def __iter__(self):
+        """Devuelve un iterador de la lista."""
+        return _IteradorListaEnlazada(self.prim)
