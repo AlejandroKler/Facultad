@@ -1,0 +1,35 @@
+class Cancion:
+	def __init__(self):
+		self.cancion = self.marca_de_tiempo
+	def playall(self):
+		
+class MarcaDeTiempo:
+	def __init__(self):
+		self.marca_de_tiempo = ListaEnlazada()
+	def markadd(self,marca_de_tiempo, posicion_iterador):
+		self.marca_de_tiempo.insert(marca_de_tiempo, posicion_iterador)
+	def markaddnext(self,marca_de_tiempo,posicion_iterador):
+		posicion_actual = posicion_iterador.prox
+		self.marca_de_tiempo.insert(marca_de_tiempo, posicion_actual)
+		
+		
+class Iterador:
+	def __init__(self):
+		self.posicion_iterador = .. . # IMPLEMENTAR EL ITERADOR. tiene que operar sobre la clase MarcaDeTiempo.
+	def step(self):
+		self.posicion_iterador = self.posicion_iterador.prox
+	def back(self):
+		self.posicion_iterador = self.posicion_iterador.ant
+	def stepm(self, n):
+		for i in range(n):
+			self.posicion_iterador = self.posicion_iterador.ant
+	def stepm(self,n):
+		for i in range(n):
+			self.posicion_iterador = self.posicion_iterador.prox
+		
+		
+Comentarios: marca_de_tiempo es la marca de tiempo que se quiere agregar. Necesitamos una variable o un atributo en la clase Iterador que indique en que 
+posicion de encuentra el Iterador en el momento (me di cuenta que el Iterador sería como el cursor de nuestro programa) Fijate si podes crear el Iterador
+asi puedo avanzar un poco mas sobre los metodos de la clase MarcaDeTiempo. Iterador solo recorre, MarcaDeTiempo O Cancion son las clases encargadas 
+de modificar la canción. hay que ver como crear el "ant" para el iterador.. creo que el "prox" es sencillo. No entiendo para que es necesaria la clase
+cancion, mañana lo hablamos bien!
