@@ -52,13 +52,13 @@ class Cancion():
     	"""Igual que MARKADD pero la inserta luego de la marca en la cual esta
 		actualmente el cursor"""
 		mark = MarcaDeTiempo(duracion)
-		self.tiempos.insert(mark,self.cursor.posicion +1)
+		self.tiempos.insert(self.cursor.posicion +1,mark)
 
 	def mark_add_prev(self,duracion):
     	"""Igual que MARKADD pero la inserta antes de la marca en la cual esta
 		actualmente el cursor"""
 		mark = MarcaDeTiempo(duracion)
-		self.tiempos.insert(mark, self.cursor.posicion - 1)
+		self.tiempos.insert(self.cursor.posicion - 1, mark)
 
 	def track_on(self,numero):
     	"""Habilita al track durante la marca de tiempo en la cual esta parada el
