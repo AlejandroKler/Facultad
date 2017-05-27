@@ -47,18 +47,30 @@ class Cancion():
 		todos los tracks arrancan como deshabilitados"""
 		mark = MarcaDeTiempo(duracion)
 		self.tiempos.insert(mark,self.cursor.posicion)
+		posicion_cursor = self.cursor.posicion
+		self.cursor = _IteradorListaEnlazada(self.tiempos.prim)
+		for i in range (0, posicion_cursor + 1):
+			self.cursor.next()
 
 	def mark_add_next(self,duracion):
     	"""Igual que MARKADD pero la inserta luego de la marca en la cual esta
 		actualmente el cursor"""
 		mark = MarcaDeTiempo(duracion)
 		self.tiempos.insert(self.cursor.posicion +1,mark)
+		posicion_cursor = self.cursor.posicion
+		self.cursor = _IteradorListaEnlazada(self.tiempos.prim)
+		for i in range(0 , posicion_cursor):
+			self.cursor.next()
 
 	def mark_add_prev(self,duracion):
     	"""Igual que MARKADD pero la inserta antes de la marca en la cual esta
 		actualmente el cursor"""
 		mark = MarcaDeTiempo(duracion)
 		self.tiempos.insert(self.cursor.posicion - 1, mark)
+		posicion_cursor = self.cursor.posicion
+		self.cursor = _IteradorListaEnlazada(self.tiempos.prim)
+		for i in range(0 , posicion_cursor + 1):
+			self.cursor.next()
 
 	def track_on(self,numero):
     	"""Habilita al track durante la marca de tiempo en la cual esta parada el
