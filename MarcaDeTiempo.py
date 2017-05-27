@@ -13,6 +13,6 @@ class MarcaDeTiempo():
 
     def deshabilitar_track(self,posicion):
     	try:
-    		self.habilitados.pop(posicion)
-    	except IndexError:
-    		# No es necesario hacer nada
+    		self.habilitados.remove(posicion)
+        except ValueError:
+            pass
