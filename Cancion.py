@@ -1,3 +1,4 @@
+from ListaEnlazada import ListaEnlazada
 class Cancion():
 	"""Descripcion"""
 
