@@ -40,5 +40,8 @@ class Shell(cmd.Cmd):
         self.cancion.play_marks(n)
     def do_PLAYSECONDS(self,n):
         self.cancion.play_seconds(n)
+    def do_EXIT(self,n):
+        bye()
+        return True
 
 Shell().cmdloop()
