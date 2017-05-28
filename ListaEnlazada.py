@@ -1,5 +1,5 @@
 from Pila import Pila
-class _IteradorListaEnlazada:
+class _IteradorListaEnlazada():
 	"""Itera una instancia de la clase ListaEnlazada"""
 	def __init__(self, prim):
 		self.actual = prim
@@ -22,7 +22,7 @@ class _IteradorListaEnlazada:
 		self.posicion -= 1
 		return self.actual.dato
 			
-class ListaEnlazada:
+class ListaEnlazada():
 	def __init__(self):
 		self.prim = None
 		self.len = 0
@@ -62,7 +62,7 @@ class ListaEnlazada:
 		return _IteradorListaEnlazada(self.prim)
 
 
-class _Nodo:
+class _Nodo():
 	def __init__(self, dato = None, prox = None):
 		self.dato = dato
 		self.prox = prox
