@@ -8,10 +8,32 @@ class Cancion():
         self.tiempos = ListaEnlazada() # Marcas de tiempo
         self.tracks = [] # Lista de tracks
         self.cursor = _IteradorListaEnlazada(self.tiempos.prim)
-        
-    def store(self):
-        """Guarda la cancion"""
-        pass
+
+    def store(self,name):
+        """Guarda la cancion
+        Parametros:
+            name (string) Nombre del archivo sin extencion"""
+        self.cursor = _IteradorListaEnlazada(self.tiempos.prim) # Volvemos el iterador al comienzo
+        with open(name + ".plp","w") as f:
+            f.write("C,"+self.track_len()+"\n")
+            for track in self.tracks:
+                f.write("S,{}|{}|{}\n".format(track[0],track[1],track[2]))
+            anterior = None
+            while True:
+                try:
+                    MarcaDeTiempo = self.cursor.next()
+                    if not MarcaDeTiempo.duracion == anterior:
+                        f.write("T,"+MarcaDeTiempo.duracion+"\n")
+                    anterior = MarcaDeTiempo.duracion
+                    cadena = ""
+                    for x in range(0,self.track_len()):
+                        if x in MarcaDeTiempo.habilitados:
+                            cadena += "#"
+                        else:
+                            cadena += "·"
+                    f.write("N,"+cadena+"\n")
+                except StopIteration:
+                    break
 
     def step(self,file):
         """Avanza a la siguiente marca de tiempo."""
