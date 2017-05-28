@@ -1,15 +1,15 @@
 from Cancion import Cancion
-from ListaEnlazada import ListaEnlazada
+from ListaEnlazada import ListaEnlazada,_IteradorListaEnlazada
 import cmd
 
 class Shell(cmd.Cmd):
-    intro = "Bienvenido a mi Sounds of Cyber City.\n Ingrese help o ? para listar los comandos.\n"
+    intro = "Bienvenido a Sounds of Cyber City.\n Ingrese help o ? para listar los comandos.\n"
     prompt = "*>> "
     cancion = Cancion()
     def do_LOAD(self,file):
-        self.cancion.load(file)
-    def do_STORE(self):
-        self.cancion.store()
+        print(load(file,self))
+    def do_STORE(self,name):
+        self.cancion.store(name)
     def do_STEP(self):
         self.cancion.step(file)
     def do_STEPM(self,n):
@@ -43,5 +43,3 @@ class Shell(cmd.Cmd):
     def do_EXIT(self,n):
         bye()
         return True
-
-Shell().cmdloop()
