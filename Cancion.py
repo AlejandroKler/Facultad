@@ -93,19 +93,21 @@ class Cancion():
 
     def play(self):
         """Reproduce la marca en la que se encuentra el cursor actualmente."""
-        pass
+        reproducir(self.cursor.actual)
 
     def play_all(self):
         """Reproduce la cancion completa desde el inicio."""
         pass
         self.cursor = _IteradorListaEnlazada(self.tiempos.prim)
         for i in range (0, track_len()):
-            reproducir(self.tiempos)
+            reproducir(self.cursor.actual)
+            if i != (track_len() -1):
+                self.cursor.next()
 
     def play_marks(self,n):
         """Reproduce las proximas n marcas desde la posicion actual del cursor."""
         for i in range (self.cursor, self.cursor + n):
-            reproducir(self.tiempos)
+            reproducir(self.cursor.actual)
             self.cursor.next()
 
     def play_seconds(self,n):
