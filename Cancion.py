@@ -73,7 +73,7 @@ class Cancion():
         actualmente el cursor"""
         mark = MarcaDeTiempo(duracion)
         self.tiempos.insert(self.cursor.posicion + 1,mark)
-        self.mover_cursor(1)
+        self.mover_cursor()
 
     def mark_add_prev(self,duracion):
         """Igual que MARKADD pero la inserta antes de la marca en la cual esta
@@ -98,10 +98,15 @@ class Cancion():
     def play_all(self):
         """Reproduce la cancion completa desde el inicio."""
         pass
+        self.cursor = _IteradorListaEnlazada(self.tiempos.prim)
+        for i in range (0, track_len()):
+            reproducir(self.tiempos)
 
     def play_marks(self,n):
         """Reproduce las proximas n marcas desde la posicion actual del cursor."""
-        pass
+        for i in range (self.cursor, self.cursor + n):
+            reproducir(self.tiempos)
+            self.cursor.next()
 
     def play_seconds(self,n):
         """Reproduce los proximos N segundos la posicion actual del cursor. Si
