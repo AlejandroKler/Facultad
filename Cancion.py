@@ -86,11 +86,24 @@ class Cancion():
     def track_on(self,numero):
         """Habilita al track durante la marca de tiempo en la cual esta parada el
         cursor."""
-
+	try:
+		track = self.tracks[numero]
+		if not track in self.cursor.actual.habilitados: 
+			self.cursor.actual.habilitados.append(track)
+	except IndexError:
+		return 'No existe tal track en la canción'
+	
     def track_off(self,numero):
         """Deshabilita al track durante la marca de tiempo en la cual esta parada el
         cursor."""
-        pass
+        try:
+		track = self.tracks[numero]
+	except IndexError:
+		return 'No existe tal track en la canción'
+	try:
+		self.cursor.actual.habilitados.remove(track)
+	except ValueError:
+		return 'Este track no se encuentra habilitado'
 
     def play(self):
         """Reproduce la marca en la que se encuentra el cursor actualmente."""
