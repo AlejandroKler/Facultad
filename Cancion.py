@@ -87,12 +87,12 @@ class Cancion():
     def track_on(self,numero):
         """Habilita al track durante la marca de tiempo en la cual esta parada el
         cursor."""
-    try:
-        track = self.tracks[numero]
-        if not track in self.cursor.actual.habilitados: 
-            self.cursor.actual.habilitados.append(track)
-    except IndexError:
-        return 'No existe tal track en la canción'
+        try:
+            track = self.tracks[numero]
+            if not track in self.cursor.actual.habilitados: 
+                self.cursor.actual.habilitados.append(track)
+        except IndexError:
+            return 'No existe tal track en la canción'
     
     def track_off(self,numero):
         """Deshabilita al track durante la marca de tiempo en la cual esta parada el
@@ -149,10 +149,9 @@ class Cancion():
             freq = x[1]
             vol = x[2]
             if x[0] == "sine":
-                sonidos_a_reproducir.append(pysounds.SoundFactory.get_sine_sound(freq,vol)
+                sonidos_a_reproducir.append(pysounds.SoundFactory.get_sine_sound(freq,vol))
             if x[0] == "triangular":
-                sonidos_a_reproducir.append(pysounds.SoundFactory.get_triangular_sound(freq,vol)
+                sonidos_a_reproducir.append(pysounds.SoundFactory.get_triangular_sound(freq,vol))
             if x[0] == "square":
-                sonidos_a_reproducir.append(pysounds.SoundFactory.get_square_sound(freq,vol)
+                sonidos_a_reproducir.append(pysounds.SoundFactory.get_square_sound(freq,vol))
         sp.play_sounds(sonidos_a_reproducir, duracion)
-        
