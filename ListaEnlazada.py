@@ -1,4 +1,5 @@
 from Pila import Pila
+
 class _IteradorListaEnlazada():
     """Itera una instancia de la clase ListaEnlazada"""
     def __init__(self, prim):
@@ -44,6 +45,7 @@ class ListaEnlazada():
             n_ant.prox = n_act.prox
         self.len -= 1
         return dato
+		
     def append(self,x):
         nuevo = _Nodo(x)
         if self.len == 0:
@@ -56,24 +58,6 @@ class ListaEnlazada():
                 n_act = n_act.prox
             n_act.prox = nuevo
         self.len += 1
-        
-    def remove(self, x):
-        """Borra la primera aparición del valor x en la lista.
-         Si x no está en la lista, levanta ValueError"""
-            if self.len == 0:
-            raise ValueError("Lista vacía")
-        if self.prim.dato == x:
-            self.prim = self.prim.prox
-            else:
-                    n_ant = self.prim
-                    n_act = n_ant.prox
-            while n_act is not None and n_act.dato != x:
-                    n_ant = n_act
-                    n_act = n_ant.prox
-        if n_act == None:
-                    raise ValueError("El valor no está en la lista.")
-        n_ant.prox = n_act.prox
-            self.len -= 1
         
     def insert(self, i, x):
         """Inserta el elemento x en la posición i.
