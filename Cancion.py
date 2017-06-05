@@ -128,6 +128,16 @@ class Cancion():
         """Reproduce los proximos N segundos la posicion actual del cursor. Si
         alguna marca dura mas del tiempo restante, la reproduccion se corta
         antes."""
+        suma_duracion = 0
+        while True:
+            try:
+                self.reproducir(self.cursor.actual)
+                suma_duracion += self.cursor.duracion
+                if suma_duracion >= n:
+                    break
+                self.cursor.next()
+            except StopIteration:
+                break
         
     def track_len(self):
         """ Obtiene la cantidad de tracks cargados"""
@@ -155,3 +165,4 @@ class Cancion():
             if x[0] == "square":
                 sonidos_a_reproducir.append(pysounds.SoundFactory.get_square_sound(freq,vol))
         sp.play_sounds(sonidos_a_reproducir, duracion)
+        
