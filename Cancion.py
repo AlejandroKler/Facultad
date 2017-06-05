@@ -1,6 +1,7 @@
 from ListaEnlazada import ListaEnlazada
 from ListaEnlazada import _IteradorListaEnlazada
 from MarcaDeTiempo import MarcaDeTiempo
+import soundPlayer as pysounds
 class Cancion():
     """Descripcion"""
 
@@ -107,21 +108,21 @@ class Cancion():
 
     def play(self):
         """Reproduce la marca en la que se encuentra el cursor actualmente."""
-        reproducir(self.cursor.actual)
+        self.reproducir(self.cursor.actual)
 
     def play_all(self):
         """Reproduce la cancion completa desde el inicio."""
         pass
         self.cursor = _IteradorListaEnlazada(self.tiempos.prim)
         for i in range (0, track_len()):
-            reproducir(self.cursor.actual)
+            self.reproducir(self.cursor.actual)
             if i != (track_len() -1):
                 self.cursor.next()
 
     def play_marks(self,n):
         """Reproduce las proximas n marcas desde la posicion actual del cursor."""
-        for i in range (self.cursor, self.cursor + n):
-            reproducir(self.cursor.actual)
+        for i in range (0, n):
+            self.reproducir(self.cursor.actual)
             self.cursor.next()
 
     def play_seconds(self,n):
@@ -140,21 +141,19 @@ class Cancion():
         self.cursor = _IteradorListaEnlazada(self.tiempos.prim)
         for i in range(0 , posicion_cursor + n):
             self.cursor.next()
-            
-	import soundPlayer as pysounds
 
-	def reproductor(self):              
-		sp = pysounds.SoundPlayer(2)  # Acá no se bien que numero va entre paréntesis en SoundPlayer pero asi funciona
-		duracion = self.cursor.actual.duracion
+	def reproducir(self,mark):              
+		sp = pysounds.SoundPlayer(2)
+		duracion = mark.duracion
 		sonidos_a_reproducir = []
-		for x in range(0, len(self.cursor.actual.habilitados)):
-			freq = self.cursor.actual.habilitados[x][1]
-			vol = self.cursor.actual.habilitados[x][2]
-		if self.cursor.actual.habilitados[x][0] == sine:
-			reproducir.append(pysounds.SoundFactory.get_sine_sound(freq,vol)
-		if self.cursor.actual.habilitados[x][0] == triangular:
-			reproducir.append(pysounds.SoundFactory.get_sine_sound(freq,vol)
-		if self.cursor.actual.habilitados[x][0] == square:
-			reproducir.append(pysounds.SoundFactory.get_sine_sound(freq,vol)
+		for x in mark.habilitados:
+			freq = x[1]
+			vol = x[2]
+			if x[0] == sine:
+				sonidos_a_reproducir.append(pysounds.SoundFactory.get_sine_sound(freq,vol)
+			if x[0] == triangular:
+				sonidos_a_reproducir.append(pysounds.SoundFactory.get_triangular_sound(freq,vol)
+			if x[0] == square:
+				sonidos_a_reproducir.append(pysounds.SoundFactory.get_square_sound(freq,vol)
 		sp.play_sounds(sonidos_a_reproducir, duracion)
 		
