@@ -19,7 +19,7 @@ class Shell(cmd.Cmd):
     def do_BACKM(self,n):
         self.cancion.load(n)
     def do_TRACKADD(self,params):
-		funcion,frecuencia,volumen = params.rstrip(" ")
+        funcion,frecuencia,volumen = params.split()
         self.cancion.track_add(funcion,frecuencia,volumen)
     def do_TRACKDEL(self,n):
         self.cancion.track_del(n)
