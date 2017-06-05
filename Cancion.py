@@ -141,21 +141,20 @@ class Cancion():
         for i in range(0 , posicion_cursor + n):
             self.cursor.next()
             
-    import soundPlayer as pysounds
+	import soundPlayer as pysounds
 
-	def reproductor(self):              # Hay que modificar en MarcaDeTiempo los tracks habilitados. self.habilitados debe ser una lista que contenga sublistas
-										# con [ [func,freq,vol] ] 
-        sp = pysounds.SoundPlayer(2)  # Acá no se bien que numero va entre paréntesis
-        duracion = self.cursor.actual.duracion
-        sonidos_a_reproducir = []
-        for x in range(0, len(self.cursor.actual.habilitados)):
-            freq = self.cursor.actual.habilitados[x][1]
-                    vol = self.cursor.actual.habilitados[x][2]
-            if self.cursor.actual.habilitados[x][0] == sine:
-                reproducir.append(pysounds.SoundFactory.get_sine_sound(freq,vol)
-            if self.cursor.actual.habilitados[x][0] == triangular:
-                reproducir.append(pysounds.SoundFactory.get_sine_sound(freq,vol)
-            if self.cursor.actual.habilitados[x][0] == square:
-                reproducir.append(pysounds.SoundFactory.get_sine_sound(freq,vol)
-        sp.play_sounds(sonidos_a_reproducir, duracion)
+	def reproductor(self):              
+		sp = pysounds.SoundPlayer(2)  # Acá no se bien que numero va entre paréntesis en SoundPlayer pero asi funciona
+		duracion = self.cursor.actual.duracion
+		sonidos_a_reproducir = []
+		for x in range(0, len(self.cursor.actual.habilitados)):
+			freq = self.cursor.actual.habilitados[x][1]
+			vol = self.cursor.actual.habilitados[x][2]
+		if self.cursor.actual.habilitados[x][0] == sine:
+			reproducir.append(pysounds.SoundFactory.get_sine_sound(freq,vol)
+		if self.cursor.actual.habilitados[x][0] == triangular:
+			reproducir.append(pysounds.SoundFactory.get_sine_sound(freq,vol)
+		if self.cursor.actual.habilitados[x][0] == square:
+			reproducir.append(pysounds.SoundFactory.get_sine_sound(freq,vol)
+		sp.play_sounds(sonidos_a_reproducir, duracion)
 		
