@@ -18,7 +18,8 @@ class Shell(cmd.Cmd):
         self.cancion.back()
     def do_BACKM(self,n):
         self.cancion.load(n)
-    def do_TRACKADD(self,funcion,frecuencia,volumen):
+    def do_TRACKADD(self,params):
+		funcion,frecuencia,volumen = params.rstrip(" ")
         self.cancion.track_add(funcion,frecuencia,volumen)
     def do_TRACKDEL(self,n):
         self.cancion.track_del(n)
@@ -27,7 +28,7 @@ class Shell(cmd.Cmd):
     def do_MARKADDNEXT(self,duracion):
         self.cancion.mark_add_next(duracion)
     def do_MARKADDPREV(self,duracion):
-        self.cancion.mark_add_PREV(duracion)
+        self.cancion.mark_add_prev(duracion)
     def do_TRACKON(self,n):
         self.cancion.track_on(n)
     def do_TRACKOFF(self,n):
