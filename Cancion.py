@@ -87,24 +87,24 @@ class Cancion():
     def track_on(self,numero):
         """Habilita al track durante la marca de tiempo en la cual esta parada el
         cursor."""
-	try:
-		track = self.tracks[numero]
-		if not track in self.cursor.actual.habilitados: 
-			self.cursor.actual.habilitados.append(track)
-	except IndexError:
-		return 'No existe tal track en la canción'
-	
+    try:
+        track = self.tracks[numero]
+        if not track in self.cursor.actual.habilitados: 
+            self.cursor.actual.habilitados.append(track)
+    except IndexError:
+        return 'No existe tal track en la canción'
+    
     def track_off(self,numero):
         """Deshabilita al track durante la marca de tiempo en la cual esta parada el
         cursor."""
         try:
-		track = self.tracks[numero]
-	except IndexError:
-		return 'No existe tal track en la canción'
-	try:
-		self.cursor.actual.habilitados.remove(track)
-	except ValueError:
-		return 'Este track no se encuentra habilitado'
+            track = self.tracks[numero]
+        except IndexError:
+            return 'No existe tal track en la canción'
+        try:
+            self.cursor.actual.habilitados.remove(track)
+        except ValueError:
+            return 'Este track no se encuentra habilitado'
 
     def play(self):
         """Reproduce la marca en la que se encuentra el cursor actualmente."""
@@ -112,11 +112,10 @@ class Cancion():
 
     def play_all(self):
         """Reproduce la cancion completa desde el inicio."""
-        pass
         self.cursor = _IteradorListaEnlazada(self.tiempos.prim)
-        for i in range (0, track_len()):
+        for i in range (0, self.track_len()):
             self.reproducir(self.cursor.actual)
-            if i != (track_len() -1):
+            if i != (self.track_len() -1):
                 self.cursor.next()
 
     def play_marks(self,n):
@@ -142,18 +141,18 @@ class Cancion():
         for i in range(0 , posicion_cursor + n):
             self.cursor.next()
 
-	def reproducir(self,mark):              
-		sp = pysounds.SoundPlayer(2)
-		duracion = mark.duracion
-		sonidos_a_reproducir = []
-		for x in mark.habilitados:
-			freq = x[1]
-			vol = x[2]
-			if x[0] == sine:
-				sonidos_a_reproducir.append(pysounds.SoundFactory.get_sine_sound(freq,vol)
-			if x[0] == triangular:
-				sonidos_a_reproducir.append(pysounds.SoundFactory.get_triangular_sound(freq,vol)
-			if x[0] == square:
-				sonidos_a_reproducir.append(pysounds.SoundFactory.get_square_sound(freq,vol)
-		sp.play_sounds(sonidos_a_reproducir, duracion)
-		
+    def reproducir(self,mark):              
+        sp = pysounds.SoundPlayer(2)
+        duracion = mark.duracion
+        sonidos_a_reproducir = []
+        for x in mark.habilitados:
+            freq = x[1]
+            vol = x[2]
+            if x[0] == "sine":
+                sonidos_a_reproducir.append(pysounds.SoundFactory.get_sine_sound(freq,vol)
+            if x[0] == "triangular":
+                sonidos_a_reproducir.append(pysounds.SoundFactory.get_triangular_sound(freq,vol)
+            if x[0] == "square":
+                sonidos_a_reproducir.append(pysounds.SoundFactory.get_square_sound(freq,vol)
+        sp.play_sounds(sonidos_a_reproducir, duracion)
+        
