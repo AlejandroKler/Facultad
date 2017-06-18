@@ -1,15 +1,15 @@
 class Pila:
-	def __init__(self):
-		self.items = []
-	def esta_vacia(self):
-		return len(self.items) == 0
-	def apilar(self,x):
-		self.items.append(x)
-	def desapilar(self):
-		if self.esta_vacia():
-			raise IndexError("La pila está vacía")
-		return self.items.pop()
-	def ver_tope(self):
-		if self.esta_vacia():
-			raise IndexError("La pila esta vacia")
-		return self.items[-1]
+    def __init__(self):
+        self.items = []
+    def esta_vacia(self):
+        return len(self.items) == 0
+    def apilar(self,x):
+        self.items.append(x)
+    def desapilar(self):
+        if self.esta_vacia():
+            raise IndexError("La pila está vacía")
+        return self.items.pop()
+    def ver_tope(self):
+        if self.esta_vacia():
+            raise IndexError("La pila esta vacia")
+        return self.items[-1]
