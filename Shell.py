@@ -49,3 +49,5 @@ class Shell(cmd.Cmd):
         self.cancion.play_marks(convert_num(n))
     def do_PLAYSECONDS(self,n):
         self.cancion.play_seconds(convert_num(n))
+    def actualizar_cancion(self,cancion):
+        self.cancion = cancion
