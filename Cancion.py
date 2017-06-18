@@ -4,20 +4,21 @@ from MarcaDeTiempo import MarcaDeTiempo
 import soundPlayer as pysounds
 
 class Cancion():
-    """Descripcion"""
+    """Representa un conjunto de marcas de tiempo y sonidos (tracks)"""
     def __init__(self):
         """Crea una instancia de la clase."""
         self.tiempos = ListaEnlazada() # Marcas de tiempo
         self.tracks = [] # Lista de tracks
         self.cursor = _IteradorListaEnlazada(self.tiempos.prim)
+        self.funciones_disponibles = ["sine","triangular","square"] # Constante con los tipos de tracks
 
     def store(self,name):
         """Guarda la cancion
         Parametros:
-            name (string) Nombre del archivo sin extencion"""
+            name (string) Nombre del archivo sin extension"""
         self.cursor = _IteradorListaEnlazada(self.tiempos.prim) # Volvemos el iterador al comienzo
         with open(name + ".plp","w") as f:
-            f.write("C,"+self.track_len()+"\n")
+            f.write("C,"+string(self.cant_tracks())+"\n")
             for track in self.tracks:
                 f.write("S,{}|{}|{}\n".format(track[0],track[1],track[2]))
             anterior = None
@@ -28,8 +29,8 @@ class Cancion():
                         f.write("T,"+MarcaDeTiempo.duracion+"\n")
                     anterior = MarcaDeTiempo.duracion
                     cadena = ""
-                    for x in range(0,self.track_len()):
-                        if x in MarcaDeTiempo.habilitados:
+                    for x in range(0,self.cant_tracks()):
+                        if x in MarcaDeTiempo.tracks_habilitados:
                             cadena += "#"
                         else:
                             cadena += "·"
@@ -38,14 +39,14 @@ class Cancion():
                     break
 
     def step(self):
-        """Avanza a la siguiente marca de tiempo."""
+        """Avanza a la siguiente marca de tiempo si la hay. Si no, no hace nada."""
         try:
             self.cursor.next()
         except StopIteration:
             return
             
     def stepm(self,n):
-        """Avanza N marcas de tiempo hacia adelante."""
+        """Avanza N marcas de tiempo hacia adelante o las que pueda."""
         try:
             for x in range(0,n):
                 self.cursor.next()
@@ -53,85 +54,82 @@ class Cancion():
             return
             
     def back(self):
-        """Retrocede a la anterior marca de tiempo"""
+        """Retrocede a la anterior marca de tiempo si puede."""
         try:
             self.cursor.prev()
         except StopIteration:
             return
 
     def backm(self,n):
-        """Retrocede N marcas de tiempo hacia atras."""
+        """Retrocede N marcas de tiempo hacia atras o las que pueda."""
         try:
-            for x in range(0,n):
+            for x in range(n):
                 self.cursor.prev()
         except StopIteration:
             return 
 
     def track_add(self,funcion,frecuencia,volumen):
         """Agrega un track con el sonido indicado."""
-        funcion_minuscula = funcion.lower()
-        if funcion_minuscula not in ['sine', 'triangular', 'square']:
-            return 'El sonido introducido no existe'
+        if funcion.lower() not in self.funciones_disponibles:
+            print('El sonido introducido no existe')
         if volumen > 1 or volumen < 0:
-            return 'El volumen no puede tomar un valor mayor a uno ni ser menor que 0'
+            print('El volumen no puede tomar un valor mayor a uno ni ser menor que 0')
         self.tracks.append([funcion,frecuencia,volumen])
 
-    def track_del(self,posicion = None):
+    def track_del(self,posicion):
         """Elimina un track por numero."""
         try:
             self.tracks.pop(posicion)
         except IndexError:
-            return 'Este track no se encuentra en la canción'
+            print('Este track no se encuentra en la canción')
 
     def mark_add(self,duracion):
         """Agrega una marca de tiempo de la duracion establecida. Originalmente
         todos los tracks arrancan como deshabilitados"""
         mark = MarcaDeTiempo(duracion)
-        if self.tiempos.prim == None:
-            self.tiempos.append(mark)
-            return
         self.tiempos.insert(self.cursor.posicion,mark)
-        self.mover_cursor()
+        self._mover_cursor()
 
     def mark_add_next(self,duracion):
         """Igual que MARKADD pero la inserta luego de la marca en la cual esta
         actualmente el cursor"""
         mark = MarcaDeTiempo(duracion)
         self.tiempos.insert(self.cursor.posicion + 1,mark)
-        self.mover_cursor()
+        self._mover_cursor()
 
     def mark_add_prev(self,duracion):
         """Igual que MARKADD pero la inserta antes de la marca en la cual esta
         actualmente el cursor"""
         mark = MarcaDeTiempo(duracion)
         if self.cursor.posicion == 0:
-            return 'No hay posición anterior para insertar una marca'
-        if self.tiempos.prim == None:
-            return 'Debe insertar al menos una marca para utilizar esta función'
+            print('No hay posición anterior para insertar una marca')
+            return
+        if not self.tiempos.prim:
+            print('Debe insertar al menos una marca para utilizar esta función')
+            return
         self.tiempos.insert(self.cursor.posicion - 1, mark)
-        self.mover_cursor(1)
+        self._mover_cursor(1)
 
     def track_on(self,numero):
         """Habilita al track durante la marca de tiempo en la cual esta parada el
         cursor."""
         try:
             track = self.tracks[numero]
-            if not track in self.cursor.actual.dato.habilitados: 
-                self.cursor.actual.dato.habilitados.append(track)
+            if not track in self.cursor.actual.dato.tracks_habilitados: 
+                self.cursor.actual.dato.tracks_habilitados.append(track)
         except IndexError:
-            return 'No existe tal track en la canción'
+            print('No existe tal track en la canción')
         
     def track_off(self,numero):
         """Deshabilita al track durante la marca de tiempo en la cual esta parada el
         cursor."""
         try:
             track = self.tracks[numero]
+            self.cursor.actual.dato.tracks_habilitados.remove(track)
         except IndexError:
-            return 'No existe tal track en la canción'
-        try:
-            self.cursor.actual.dato.habilitados.remove(track)
+            print('No existe tal track en la canción')
         except ValueError:
-            return 'Este track no se encuentra habilitado'
+            print('Este track no se encuentra habilitado')
             
     def play(self):
         """Reproduce la marca en la que se encuentra el cursor actualmente."""
@@ -140,9 +138,9 @@ class Cancion():
     def play_all(self):
         """Reproduce la cancion completa desde el inicio."""
         self.cursor = _IteradorListaEnlazada(self.tiempos.prim)
-        for i in range (0, self.track_len()):
+        for i in range (0, self.cant_tracks()):
             self.reproducir(self.cursor.actual.dato)
-            if i != (self.track_len() -1):
+            if i != (self.cant_tracks() -1):
                 self.cursor.next()
 
     def play_marks(self,n):
@@ -169,30 +167,31 @@ class Cancion():
             except StopIteration:
                 break
         
-    def track_len(self):
+    def cant_tracks(self):
         """Obtiene la cantidad de tracks cargados"""
         return len(self.tracks)
 
-    def mover_cursor(self,n=0):
-        """ Genera una nueva instancia del iterador y mueve el cursor.
-        Recibe un parametro n que indica el desplazamiento con repecto a la posicion original"""
+    def _mover_cursor(self,desplazamiento=0):
+        """ Reinicia el iterador y mueve el cursor a la posicion actual (por defecto) o a la posicion indicada por parametro.
+        Recibe un parametro desplazamiento que indica el desplazamiento con repecto a la posicion original"""
         posicion_cursor = self.cursor.posicion
         self.cursor = _IteradorListaEnlazada(self.tiempos.prim)
-        for i in range(0 , posicion_cursor + n):
-            if i != (posicion_cursor + n - 1):
+        for i in range(0 , posicion_cursor + desplazamiento):
+            if i != (posicion_cursor + desplazamiento - 1):
                 self.cursor.next()
         
     def reproducir(self,mark):              
         sp = pysounds.SoundPlayer(len(self.tracks))
         duracion = mark.duracion
         sonidos_a_reproducir = []
-        for x in mark.habilitados:
-            freq = x[1]
-            vol = x[2]
-            if x[0] == "sine":
+        for track in mark.tracks_habilitados:
+            tipo = track[0]
+            freq = track[1]
+            vol = track[2]
+            if tipo == "sine":
                 sonidos_a_reproducir.append(pysounds.SoundFactory.get_sine_sound(freq,vol))
-            if x[0] == "triangular":
+            if tipo == "triangular":
                 sonidos_a_reproducir.append(pysounds.SoundFactory.get_triangular_sound(freq,vol))
-            if x[0] == "square":
+            if tipo == "square":
                 sonidos_a_reproducir.append(pysounds.SoundFactory.get_square_sound(freq,vol))
         sp.play_sounds(sonidos_a_reproducir, duracion)
