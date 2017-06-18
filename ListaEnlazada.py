@@ -45,7 +45,7 @@ class ListaEnlazada():
             n_ant.prox = n_act.prox
         self.len -= 1
         return dato
-		
+        
     def append(self,x):
         nuevo = _Nodo(x)
         if self.len == 0:
