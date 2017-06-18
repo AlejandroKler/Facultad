@@ -10,7 +10,6 @@ def convert_num(cadena,isfloat=False):
     print("Ha ingresado un parametro incorrectamente")
     return
 
-
 class Shell(cmd.Cmd):
     intro = "Bienvenido a Sounds of Cyber City.\n Ingrese help o ? para listar los comandos.\n"
     prompt = "*>> "
@@ -20,7 +19,7 @@ class Shell(cmd.Cmd):
     def do_STORE(self,name):
         self.cancion.store(name)
     def do_STEP(self):
-        self.cancion.step(file)
+        self.cancion.step()
     def do_STEPM(self,n):
         self.cancion.stepm(convert_num(n))
     def do_BACK(self):
@@ -50,6 +49,3 @@ class Shell(cmd.Cmd):
         self.cancion.play_marks(convert_num(n))
     def do_PLAYSECONDS(self,n):
         self.cancion.play_seconds(convert_num(n))
-    def do_EXIT(self,n):
-        bye()
-        return True
