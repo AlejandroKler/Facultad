@@ -154,16 +154,14 @@ class Cancion():
         except StopIteration:
             return 
 
-    def play_seconds(self,n):
-        """Reproduce los proximos N segundos la posicion actual del cursor. Si
-        alguna marca dura mas del tiempo restante, la reproduccion se corta
-        antes."""
+    def play_seconds(self,segundos):
+        """Reproduce los proximos segundos la posicion actual del cursor."""
         suma_duracion = 0
         while True:
             try:
                 self.reproducir(self.cursor.actual.dato)
                 suma_duracion += self.cursor.actual.dato.duracion
-                if suma_duracion >= n:
+                if suma_duracion >= segundos:
                     break
                 self.cursor.next()
             except StopIteration:
@@ -171,7 +169,7 @@ class Cancion():
         
     def cant_tracks(self):
         """Obtiene la cantidad de tracks cargados"""
-        return "ETST"#len(self.tracks)
+        return len(self.tracks)
 
     def _mover_cursor(self,desplazamiento=0):
         """ Reinicia el iterador y mueve el cursor a la posicion actual (por defecto) o a la posicion indicada por parametro.
