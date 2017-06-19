@@ -3,12 +3,12 @@ from ListaEnlazada import ListaEnlazada,_IteradorListaEnlazada
 import cmd
 
 def convert_num(cadena,isfloat=False):
-    if cadena.isdigit():
-        if isfloat:
-            return float(cadena)
-        return int(cadena)
-    print("Ha ingresado un parametro incorrectamente")
-    return
+    if not cadena.isdigit():
+        print("Ha ingresado un parametro incorrectamente")
+        return
+    if isfloat:
+        return float(cadena)
+    return int(cadena)
 
 class Shell(cmd.Cmd):
     intro = "Bienvenido a Sounds of Cyber City.\n Ingrese help o ? para listar los comandos.\n"
