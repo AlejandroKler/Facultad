@@ -72,8 +72,8 @@ class ListaEnlazada():
             n_ant = self.prim
             for pos in range(1, i):
                 n_ant = n_ant.prox
-                nuevo.prox = n_ant.prox
-                n_ant.prox = nuevo
+            nuevo.prox = n_ant.prox
+            n_ant.prox = nuevo
         self.len += 1
         
     def __iter__(self):
