@@ -25,20 +25,24 @@ class _IteradorListaEnlazada():
             
 class ListaEnlazada():
     def __init__(self):
+        """Crea una lista enlazada vacía."""
         self.prim = None
         self.len = 0
-    def pop(self, i = None):
-        if not i:
-            i = self.len - 1
-        if i < 0 or i >= self.len:
+    def pop(self, posicion = None):
+        """ Elimina el nodo y devuelve el dato contenido.
+		Si está fuera de rango, se levanta la excepción IndexError.
+		Si no se recibe la posición, devuelve el último elemento."""
+        if not posicion:
+            posicion = self.len - 1
+        if posicion < 0 or posicion >= self.len:
             raise IndexError('Indice fuera de rango')
-        if i == 0:
+        if posicion == 0:
             dato = self.prim.dato
             self.prim = self.prim.prox
         else:
             n_ant = self.prim
             n_act = n_ant.prox
-            for pos in range (1, i):
+            for pos in range (1, posicion):
                 n_ant = n_act
                 n_act = n_ant.prox
             dato = n_act.dato
@@ -59,18 +63,18 @@ class ListaEnlazada():
             n_act.prox = nuevo
         self.len += 1
         
-    def insert(self, i, x):
-        """Inserta el elemento x en la posición i.
+    def insert(self, posicion, dato):
+        """Inserta el dato en la posición indicada.
         Si la posición es inválida, levanta IndexError"""
-        if i < 0 or i > self.len:
+        if posicion < 0 or posicion > self.len:
             raise IndexError("Posición inválida")
-        nuevo = _Nodo(x)
-        if i == 0:
+        nuevo = _Nodo(dato)
+        if posicion == 0:
             nuevo.prox = self.prim
             self.prim = nuevo
         else:
             n_ant = self.prim
-            for pos in range(1, i):
+            for pos in range(1, posicion):
                 n_ant = n_ant.prox
             nuevo.prox = n_ant.prox
             n_ant.prox = nuevo
