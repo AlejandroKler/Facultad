@@ -77,12 +77,12 @@ class ListaEnlazada():
         self.len += 1
         
     def __iter__(self):
-        " Devuelve el iterador de la lista. "
+        """ Devuelve el iterador de la lista. """
         return _IteradorListaEnlazada(self.prim)
 
 
 class _Nodo():
-    def __init__(self, dato = None, prox = None):
+    def __init__(self, dato, prox = None):
         self.dato = dato
         self.prox = prox
     def __str__(self):
