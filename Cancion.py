@@ -18,7 +18,7 @@ class Cancion():
             name (string) Nombre del archivo sin extension"""
         self.cursor = _IteradorListaEnlazada(self.tiempos.prim) # Volvemos el iterador al comienzo
         with open(name + ".plp","w") as f:
-            f.write("C,"+string(self.cant_tracks())+"\n")
+            f.write("C,"+str(self.cant_tracks())+"\n")
             for track in self.tracks:
                 f.write("S,{}|{}|{}\n".format(track[0],track[1],track[2]))
             anterior = None
@@ -72,8 +72,10 @@ class Cancion():
         """Agrega un track con el sonido indicado."""
         if funcion.lower() not in self.funciones_disponibles:
             print('El sonido introducido no existe')
+            return
         if volumen > 1 or volumen < 0:
             print('El volumen no puede tomar un valor mayor a uno ni ser menor que 0')
+            return
         self.tracks.append([funcion,frecuencia,volumen])
 
     def track_del(self,posicion):
@@ -169,7 +171,7 @@ class Cancion():
         
     def cant_tracks(self):
         """Obtiene la cantidad de tracks cargados"""
-        return len(self.tracks)
+        return "ETST"#len(self.tracks)
 
     def _mover_cursor(self,desplazamiento=0):
         """ Reinicia el iterador y mueve el cursor a la posicion actual (por defecto) o a la posicion indicada por parametro.
