@@ -3,6 +3,7 @@ from ListaEnlazada import ListaEnlazada,_IteradorListaEnlazada
 import cmd
 
 def convert_num(cadena,isfloat=False):
+    """ Convierte una cadena en un int o float segun corresponda. Imprime un mensaje de error si no recibe un numero"""
     if not cadena.isdigit():
         print("Ha ingresado un parametro incorrectamente")
         return
@@ -18,11 +19,11 @@ class Shell(cmd.Cmd):
         print(load(file,self))
     def do_STORE(self,name):
         self.cancion.store(name)
-    def do_STEP(self):
+    def do_STEP(self,params=None):
         self.cancion.step()
     def do_STEPM(self,n):
         self.cancion.stepm(convert_num(n))
-    def do_BACK(self):
+    def do_BACK(self,params=None):
         self.cancion.back()
     def do_BACKM(self,n):
         self.cancion.load(n)
@@ -41,9 +42,9 @@ class Shell(cmd.Cmd):
         self.cancion.track_on(convert_num(n))
     def do_TRACKOFF(self,n):
         self.cancion.track_off(convert_num(n))
-    def do_PLAY(self):
+    def do_PLAY(self,params=None):
         self.cancion.play()
-    def do_PLAYALL(self):
+    def do_PLAYALL(self,params=None):
         self.cancion.play_all()
     def do_PLAYMARKS(self,n):
         self.cancion.play_marks(convert_num(n))
