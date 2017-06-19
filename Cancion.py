@@ -107,7 +107,7 @@ class Cancion():
             print('No hay posición anterior para insertar una marca')
             return
         if not self.tiempos.prim:
-            print('Debe insertar al menos una marca para utilizar esta función')
+            print('Debe insertar al menos una marca para utilizar esta funcion')
             return
         self.tiempos.insert(self.cursor.posicion - 1, mark)
         self._mover_cursor(1)
@@ -181,7 +181,7 @@ class Cancion():
                 self.cursor.next()
         
     def reproducir(self,mark):              
-        sp = pysounds.SoundPlayer(len(self.tracks))
+        sp = pysounds.SoundPlayer(self.cant_tracks())
         duracion = mark.duracion
         sonidos_a_reproducir = []
         for track in mark.tracks_habilitados:
