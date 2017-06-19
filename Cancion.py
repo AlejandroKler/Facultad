@@ -26,7 +26,7 @@ class Cancion():
                 try:
                     MarcaDeTiempo = self.cursor.next()
                     if not MarcaDeTiempo.duracion == anterior:
-                        f.write("T,"+MarcaDeTiempo.duracion+"\n")
+                        f.write("T,"+str(MarcaDeTiempo.duracion)+"\n")
                     anterior = MarcaDeTiempo.duracion
                     cadena = ""
                     for x in range(0,self.cant_tracks()):
