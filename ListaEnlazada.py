@@ -25,24 +25,22 @@ class _IteradorListaEnlazada():
             
 class ListaEnlazada():
     def __init__(self):
-        """Crea una lista enlazada vacía."""
         self.prim = None
         self.len = 0
-    def pop(self, posicion = None):
-        """ Elimina el nodo y devuelve el dato contenido.
-		Si está fuera de rango, se levanta la excepción IndexError.
-		Si no se recibe la posición, devuelve el último elemento."""
-        if not posicion:
-            posicion = self.len - 1
-        if posicion < 0 or posicion >= self.len:
+        self.iterador = self.obtener_iterador()
+    
+    def pop(self, i = None):
+        if not i:
+            i = self.len - 1
+        if i < 0 or i >= self.len:
             raise IndexError('Indice fuera de rango')
-        if posicion == 0:
+        if i == 0:
             dato = self.prim.dato
             self.prim = self.prim.prox
         else:
             n_ant = self.prim
             n_act = n_ant.prox
-            for pos in range (1, posicion):
+            for pos in range (1, i):
                 n_ant = n_act
                 n_act = n_ant.prox
             dato = n_act.dato
@@ -63,27 +61,55 @@ class ListaEnlazada():
             n_act.prox = nuevo
         self.len += 1
         
-    def insert(self, posicion, dato):
-        """Inserta el dato en la posición indicada.
+    def insert(self, i, x):
+        """Inserta el elemento x en la posición i.
         Si la posición es inválida, levanta IndexError"""
-        if posicion < 0 or posicion > self.len:
+        if i < 0 or i > self.len:
             raise IndexError("Posición inválida")
-        nuevo = _Nodo(dato)
-        if posicion == 0:
+        nuevo = _Nodo(x)
+        if i == 0:
             nuevo.prox = self.prim
             self.prim = nuevo
         else:
             n_ant = self.prim
-            for pos in range(1, posicion):
+            for pos in range(1, i):
                 n_ant = n_ant.prox
-            nuevo.prox = n_ant.prox
-            n_ant.prox = nuevo
+                nuevo.prox = n_ant.prox
+                n_ant.prox = nuevo
         self.len += 1
         
-    def __iter__(self):
+    def obtener_iterador(self):
         """ Devuelve el iterador de la lista. """
         return _IteradorListaEnlazada(self.prim)
 
+    def siguiente(self):
+    	"""Avanza al siguiente elemento y lo devuelve"""
+    	return self.iterador.next()
+    
+    def anterior(self):
+    	"""Retrocede al anterior elemento y lo devuelve"""
+    	return self.iterador.prev()
+
+    def actual(self):
+    	""" Devuelve el dato en la posicion actual del iterador"""
+    	return self.iterador.actual.dato
+
+    def volver_al_inicio(self):
+    	"""Vuelve el iterador a la posicion inicial"""
+    	self.iterador = self.obtener_iterador()
+
+    def actualizar(self,desplazamiento=0):
+    	""" Reinicia el iterador y mueve el cursor a la posicion anterior (por defecto) o a la posicion indicada por parametro.
+        Recibe un parametro desplazamiento que indica el desplazamiento con repecto a la posicion anterior"""
+    	posicion = self.iterador.posicion
+    	self.iterador = self.obtener_iterador()
+    	for i in range(posicion + desplazamiento):
+            if i != (posicion + desplazamiento - 1):
+                self.siguiente()
+
+    def posicion_actual(self):
+    	"""Devuelve la posicion actual del iterador"""
+    	return self.iterador.posicion
 
 class _Nodo():
     def __init__(self, dato, prox = None):
