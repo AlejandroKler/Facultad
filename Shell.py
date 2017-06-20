@@ -30,7 +30,10 @@ class Shell(cmd.Cmd):
     def do_MARKADDPREV(self,duracion):
         self.cancion.mark_add_PREV(convert_num(duracion,True))
     def do_TRACKON(self,n):
-        self.cancion.track_on(convert_num(n))
+        try:
+            self.cancion.track_on(convert_num(n))
+        except IndexError:
+            print('No existe tal track en la canción')
     def do_TRACKOFF(self,n):
         self.cancion.track_off(convert_num(n))
     def do_PLAY(self,params=None):
@@ -43,6 +46,7 @@ class Shell(cmd.Cmd):
         self.cancion.play_seconds(convert_num(n))
     def actualizar_cancion(self,cancion):
         self.cancion = cancion
+
 def convert_num(cadena,isfloat=False):
     """ Convierte una cadena en un int o float segun corresponda. Imprime un mensaje de error si no recibe un numero"""
     if not cadena.replace('.','').isdigit():
@@ -69,7 +73,7 @@ def load_cancion(file,shell=None):
                 elif campo == "T":
                     duracion = float(valor)
                 elif campo == "N":
-                    cancion.mark_add(duracion)
+                    cancion.mark_add(duracion) #Siempre hay un tipo 'T' antes, donde se define duracion
                     posicion = 0
                     for caracter in valor:
                         if caracter == "#":
@@ -81,3 +85,5 @@ def load_cancion(file,shell=None):
     if shell:
         shell.actualizar_cancion(cancion) # Actualizamos el atributo del objeto shell
     print("Cancion cargada con exito")
+
+Shell().cmdloop()
