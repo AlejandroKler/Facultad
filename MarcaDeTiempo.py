@@ -18,9 +18,9 @@ class MarcaDeTiempo():
         return self.duracion
 
     def habilitar_track(self,numero_de_track):
-        """Habilita un track"""
+        """Habilita un track por su numero"""
         self.tracks_habilitados.append(numero_de_track)
 
     def deshabilitar_track(self,numero_de_track):
-        """Deshabilita un track"""
+        """Deshabilita un track por su numero"""
         self.tracks_habilitados.remove(numero_de_track)
