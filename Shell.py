@@ -22,7 +22,11 @@ class Shell(cmd.Cmd):
     def do_BACKM(self,n):
         self.cancion.load(n)
     def do_TRACKADD(self,params):
-        funcion,frecuencia,volumen = params.split()
+        lista_parametros = params.split()
+        if not len(lista_parametros) == 3:
+            print("No ingreso los 3 parametros correctamente")
+            return
+        funcion,frecuencia,volumen = lista_parametros
         self.cancion.track_add(funcion,convert_num(frecuencia),convert_num(volumen,True))
     def do_TRACKDEL(self,n):
         self.cancion.track_del(convert_num(n))
@@ -76,7 +80,7 @@ def load_cancion(file,shell=None):
                 elif campo == "T":
                     duracion = float(valor)
                 elif campo == "N":
-                    cancion.mark_add(duracion) #Siempre hay un tipo 'T' antes, donde se define duracion
+                    cancion.mark_add_next(duracion) #Siempre hay un tipo 'T' antes, donde se define duracion
                     for posicion,caracter in enumerate(valor):
                         if caracter == "#":
                             cancion.track_on(posicion)
