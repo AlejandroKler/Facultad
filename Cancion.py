@@ -93,28 +93,24 @@ class Cancion():
         """Agrega una marca de tiempo de la duracion establecida. Originalmente
         todos los tracks arrancan como deshabilitados"""
         mark = MarcaDeTiempo(duracion)
-        self.tiempos.insert(self.tiempos.posicion_actual(),mark)
-        print("posicion ",self.tiempos.posicion_actual())
-        self.tiempos.actualizar(1)
+        self.tiempos.insert(self.tiempos.posicion_actual()+1,mark)
+        self.tiempos.actualizar()
 
     def mark_add_next(self,duracion):
         """Igual que MARKADD pero la inserta luego de la marca en la cual esta
         actualmente el cursor"""
         mark = MarcaDeTiempo(duracion)
-        self.tiempos.insert(self.tiempos.posicion_actual() + 1,mark)
-        self.tiempos.actualizar()
+        self.tiempos.insert(self.tiempos.posicion_actual()+2,mark)
+        self.tiempos.actualizar(1)
 
     def mark_add_prev(self,duracion):
         """Igual que MARKADD pero la inserta antes de la marca en la cual esta
         actualmente el cursor"""
         mark = MarcaDeTiempo(duracion)
-        if self.tiempos.posicion_actual() == 0:
-            print('No hay posición anterior para insertar una marca')
-            return
         if not self.tiempos.prim:
             print('Debe insertar al menos una marca para utilizar esta funcion')
             return
-        self.tiempos.insert(self.tiempos.posicion_actual() - 1, mark)
+        self.tiempos.insert(self.tiempos.posicion_actual(), mark)
         self.tiempos.actualizar(1)
 
     def track_on(self,numero):
