@@ -13,18 +13,21 @@ class Cancion():
         self.tracks = [] # Lista de tracks
 
     def store(self,name):
-        """Guarda la cancion
+        """Guarda la cancion, si no recibe una cadena valida levanta ValueError
         Parametros:
             name (string) Nombre del archivo sin extension"""
+        if not name:
+            raise ValueError("Debe indicar el nombre")
         self.tiempos.volver_al_inicio()
         with open(name + ".plp","w") as f:
             f.write("C,"+str(self.cant_tracks())+"\n")
             for track in self.tracks:
                 f.write("S,{}|{}|{}\n".format(track.obtener_tipo(),track.obtener_frecuencia(),track.obtener_volumen()))
             anterior = None
+            MarcaDeTiempo = self.tiempos.actual()
             while True:
                 try:
-                    MarcaDeTiempo = self.tiempos.siguiente()
+                    print(MarcaDeTiempo.obtener_duracion())
                     if not MarcaDeTiempo.obtener_duracion() == anterior:
                         f.write("T,"+str(MarcaDeTiempo.obtener_duracion())+"\n")
                     anterior = MarcaDeTiempo.obtener_duracion()
@@ -35,6 +38,7 @@ class Cancion():
                         else:
                             cadena += "·"
                     f.write("N,"+cadena+"\n")
+                    MarcaDeTiempo = self.tiempos.siguiente()
                 except StopIteration:
                     break
 
@@ -90,7 +94,8 @@ class Cancion():
         todos los tracks arrancan como deshabilitados"""
         mark = MarcaDeTiempo(duracion)
         self.tiempos.insert(self.tiempos.posicion_actual(),mark)
-        self.tiempos.actualizar()
+        print(self.tiempos.posicion_actual())
+        self.tiempos.actualizar(1)
 
     def mark_add_next(self,duracion):
         """Igual que MARKADD pero la inserta luego de la marca en la cual esta
