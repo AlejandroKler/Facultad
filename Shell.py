@@ -9,7 +9,10 @@ class Shell(cmd.Cmd):
     def do_LOAD(self,file):
         load_cancion(file,self)
     def do_STORE(self,name):
-        self.cancion.store(name)
+        try:
+            self.cancion.store(name)
+        except ValueError as e:
+            print(e.strerror)
     def do_STEP(self,params=None):
         self.cancion.step()
     def do_STEPM(self,n):
@@ -74,11 +77,9 @@ def load_cancion(file,shell=None):
                     duracion = float(valor)
                 elif campo == "N":
                     cancion.mark_add(duracion) #Siempre hay un tipo 'T' antes, donde se define duracion
-                    posicion = 0
-                    for caracter in valor:
+                    for posicion,caracter in enumerate(valor):
                         if caracter == "#":
                             cancion.track_on(posicion)
-                        posicion += 1
     except IOError as e:
         print("I/O error({0}): {1}".format(e.errno, e.strerror))
         return
