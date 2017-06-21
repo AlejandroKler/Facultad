@@ -94,7 +94,7 @@ class Cancion():
         todos los tracks arrancan como deshabilitados"""
         mark = MarcaDeTiempo(duracion)
         self.tiempos.insert(self.tiempos.posicion_actual(),mark)
-        print(self.tiempos.posicion_actual())
+        print("posicion ",self.tiempos.posicion_actual())
         self.tiempos.actualizar(1)
 
     def mark_add_next(self,duracion):
@@ -121,7 +121,10 @@ class Cancion():
         """Habilita al track durante la marca de tiempo en la cual esta parada el
         cursor. Si el track no existe lanza IndexError"""
         track = self.tracks[numero] #Para levantar una excepcion si no existe el track
-        if not numero in self.tiempos.actual().obtener_habilitados(): 
+        print("va a trackon  ")
+        print(self.tiempos.actual().obtener_habilitados())
+        if not numero in self.tiempos.actual().obtener_habilitados():
+            print("TRAOK  ",numero) 
             self.tiempos.actual().habilitar_track(numero)
         
     def track_off(self,numero):
