@@ -1,94 +1,123 @@
-from Cancion import Cancion
-from ListaEnlazada import ListaEnlazada,_IteradorListaEnlazada
-import cmd
+from Pila import Pila
 
-class Shell(cmd.Cmd):
-    intro = "Bienvenido a Sounds of Cyber City.\n Ingrese help o ? para listar los comandos.\n"
-    prompt = "*>> "
-    cancion = Cancion()
-    def do_LOAD(self,file):
-        load_cancion(file,self)
-    def do_STORE(self,name):
-        try:
-            self.cancion.store(name)
-        except ValueError as e:
-            print(e.strerror)
-    def do_STEP(self,params=None):
-        self.cancion.step()
-    def do_STEPM(self,n):
-        self.cancion.stepm(convert_num(n))
-    def do_BACK(self,params=None):
-        self.cancion.back()
-    def do_BACKM(self,n):
-        self.cancion.load(n)
-    def do_TRACKADD(self,params):
-        lista_parametros = params.split()
-        if not len(lista_parametros) == 3:
-            print("No ingreso los 3 parametros correctamente")
-            return
-        funcion,frecuencia,volumen = lista_parametros
-        self.cancion.track_add(funcion,convert_num(frecuencia),convert_num(volumen,True))
-    def do_TRACKDEL(self,n):
-        self.cancion.track_del(convert_num(n))
-    def do_MARKADD(self,duracion):
-        self.cancion.mark_add(convert_num(duracion,True))
-    def do_MARKADDNEXT(self,duracion):
-        self.cancion.mark_add_next(convert_num(duracion,True))
-    def do_MARKADDPREV(self,duracion):
-        self.cancion.mark_add_PREV(convert_num(duracion,True))
-    def do_TRACKON(self,n):
-        try:
-            self.cancion.track_on(convert_num(n))
-        except IndexError:
-            print('No existe tal track en la canción')
-    def do_TRACKOFF(self,n):
-        self.cancion.track_off(convert_num(n))
-    def do_PLAY(self,params=None):
-        self.cancion.play()
-    def do_PLAYALL(self,params=None):
-        self.cancion.play_all()
-    def do_PLAYMARKS(self,n):
-        self.cancion.play_marks(convert_num(n))
-    def do_PLAYSECONDS(self,n):
-        self.cancion.play_seconds(convert_num(n))
-    def actualizar_cancion(self,cancion):
-        self.cancion = cancion
+class _IteradorListaEnlazada():
+    """Itera una instancia de la clase ListaEnlazada"""
+    def __init__(self, prim):
+        self.actual = prim
+        self.pila_auxiliar = Pila()
+        self.posicion = 0
+    def next(self):
+        if self.actual.prox is None:
+            raise StopIteration('No hay más elementos en la lista')
+        dato = self.actual
+        self.pila_auxiliar.apilar(dato)
+        self.actual = self.actual.prox
+        self.posicion += 1
+        return self.actual.dato
+    def prev(self):
+        if self.pila_auxiliar.esta_vacia():
+            raise StopIteration('No hay elemento previo')
+        dato = self.pila_auxiliar.desapilar()
+        self.actual = dato
+        self.posicion -= 1
+        return self.actual.dato
+            
+class ListaEnlazada():
+    def __init__(self):
+        """Crea una lista enlazada vacía."""
+        self.prim = None
+        self.len = 0
+        self.iterador = self.obtener_iterador()
+    
+    def pop(self, posicion = None):
+        """ Elimina el nodo y devuelve el dato contenido.
+        Si está fuera de rango, se levanta la excepción IndexError.
+        Si no se recibe la posición, devuelve el último elemento."""
+        if not posicion:
+            posicion = self.len - 1
+        if posicion < 0 or posicion >= self.len:
+            raise IndexError('Indice fuera de rango')
+        if posicion == 0:
+            dato = self.prim.dato
+            self.prim = self.prim.prox
+        else:
+            n_ant = self.prim
+            n_act = n_ant.prox
+            for pos in range (1, posicion):
+                n_ant = n_act
+                n_act = n_ant.prox
+            dato = n_act.dato
+            n_ant.prox = n_act.prox
+        self.len -= 1
+        return dato
+        
+    def append(self,dato):
+        """Agrega un elemento al final de la lista enlazada"""
+        nuevo = _Nodo(dato)
+        if self.len == 0:
+            self.prim = nuevo
+        if self.len == 1:
+            self.prim.prox = nuevo
+        if self.len != 0 and self.len != 1:
+            n_act = self.prim
+            for pos in range(1,self.len):
+                n_act = n_act.prox
+            n_act.prox = nuevo
+        self.len += 1
+        
+    def insert(self, posicion, dato):
+        """Inserta el dato en la posición indicada.
+        Si la posición es inválida, levanta IndexError"""
+        if posicion < 0 or posicion > self.len:
+            raise IndexError("Posición inválida")
+        nuevo = _Nodo(dato)
+        if posicion == 0:
+            nuevo.prox = self.prim
+            self.prim = nuevo
+        else:
+            n_ant = self.prim
+            for pos in range(1, posicion):
+                n_ant = n_ant.prox
+            nuevo.prox = n_ant.prox
+            n_ant.prox = nuevo
+        self.len += 1
+        
+    def obtener_iterador(self):
+        """ Devuelve el iterador de la lista. """
+        return _IteradorListaEnlazada(self.prim)
 
-def convert_num(cadena,isfloat=False):
-    """ Convierte una cadena en un int o float segun corresponda. Imprime un mensaje de error si no recibe un numero"""
-    if not cadena.replace('.','').isdigit():
-        print("Ha ingresado un parametro incorrectamente")
-        return
-    if isfloat:
-        return float(cadena)
-    return int(cadena)
+    def siguiente(self):
+        """Avanza al siguiente elemento y lo devuelve"""
+        return self.iterador.next()
+    
+    def anterior(self):
+        """Retrocede al anterior elemento y lo devuelve"""
+        return self.iterador.prev()
 
-def load_cancion(file,shell=None):
-    """Carga la cancion desde el archivo. Reemplaza la cancion en edicion
-    actual si es que la hay.
-    Parametros:
-        file (string) Debe tener el nombre del archivo junto con su extencion (.plp)
-        shell (object) Objeto de la clase Shell para actualizar la cancion"""
-    cancion = Cancion()
-    try:
-        with open(file,"r") as f:
-            for linea in f:
-                campo,valor = linea.rstrip("\n").split(",")
-                if campo == "S":
-                    funcion,frecuencia,volumen = valor.split("|")
-                    cancion.track_add(funcion,convert_num(frecuencia),convert_num(volumen,True))
-                elif campo == "T":
-                    duracion = float(valor)
-                elif campo == "N":
-                    cancion.mark_add_next(duracion) #Siempre hay un tipo 'T' antes, donde se define duracion
-                    for posicion,caracter in enumerate(valor):
-                        if caracter == "#":
-                            cancion.track_on(posicion)
-    except IOError as e:
-        print("I/O error({0}): {1}".format(e.errno, e.strerror))
-        return
-    if shell:
-        shell.actualizar_cancion(cancion) # Actualizamos el atributo del objeto shell
-    print("Cancion cargada con exito")
+    def actual(self):
+        """ Devuelve el dato en la posicion actual del iterador"""
+        return self.iterador.actual.dato
 
-Shell().cmdloop()
+    def volver_al_inicio(self):
+        """Vuelve el iterador a la posicion inicial"""
+        self.iterador = self.obtener_iterador()
+
+    def actualizar(self,desplazamiento=0):
+        """ Reinicia el iterador y mueve el cursor a la posicion anterior (por defecto) o a la posicion indicada por parametro.
+        Recibe un parametro desplazamiento que indica el desplazamiento con repecto a la posicion anterior"""
+        posicion = self.iterador.posicion
+        self.iterador = self.obtener_iterador()
+        for i in range(posicion + desplazamiento):
+            if i < (self.len - 1):
+                self.iterador.next()
+
+    def posicion_actual(self):
+        """Devuelve la posicion actual del iterador"""
+        return self.iterador.posicion
+
+class _Nodo():
+    def __init__(self, dato, prox = None):
+        self.dato = dato
+        self.prox = prox
+    def __str__(self):
+        return str(self.dato)
