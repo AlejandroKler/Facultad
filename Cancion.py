@@ -130,7 +130,7 @@ class Cancion():
         
     def track_off(self,numero):
         """Deshabilita al track durante la marca de tiempo en la cual esta parada el
-        cursor. Si el track no estaba habilitado, no hace nada.
+        cursor. Si el track no estaba habilitado, no hace nada. Si no hay marca levanta AttributeError.
         Parametros:
             numero (int) Numero de track (o posicion)"""
         if numero in self.tiempos.actual().obtener_habilitados():
