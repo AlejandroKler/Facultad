@@ -85,7 +85,10 @@ class Shell(cmd.Cmd):
         """Desabilita al track durante la marca de tiempo actual"""
         if not is_numeric(n):
             return
-        self.cancion.track_off(int(n))
+        try:
+            self.cancion.track_off(int(n))
+        except AttributeError:
+            print("No hay marca")
     def do_PLAY(self,params=None):
         """Reproduce la marca actual."""
         self.cancion.play()
