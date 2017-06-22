@@ -70,6 +70,7 @@ def load_cancion(file,shell=None):
         file (string) Debe tener el nombre del archivo junto con su extencion (.plp)
         shell (object) Objeto de la clase Shell para actualizar la cancion"""
     cancion = Cancion()
+    primer_marca = True
     try:
         with open(file,"r") as f:
             for linea in f:
@@ -80,7 +81,13 @@ def load_cancion(file,shell=None):
                 elif campo == "T":
                     duracion = float(valor)
                 elif campo == "N":
-                    cancion.mark_add_next(duracion) #Siempre hay un tipo 'T' antes, donde se define duracion
+					#Siempre hay un tipo 'T' antes, donde se define duracion
+                    if primer_marca:
+                        cancion.mark_add(duracion)
+                    else:
+                        cancion.mark_add_next(duracion)
+                    primer_marca = False
+                    cancion.step()
                     for posicion,caracter in enumerate(valor):
                         if caracter == "#":
                             cancion.track_on(posicion)
