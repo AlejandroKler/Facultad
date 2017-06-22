@@ -7,6 +7,7 @@ class _IteradorListaEnlazada():
         self.pila_auxiliar = Pila()
         self.posicion = 0
     def next(self):
+        """Avanza una posicion y devuelve el dato. Si no hay posicion siguiente levanta StopIteration"""
         if self.actual.prox is None:
             raise StopIteration('No hay más elementos en la lista')
         dato = self.actual
@@ -15,6 +16,7 @@ class _IteradorListaEnlazada():
         self.posicion += 1
         return self.actual.dato
     def prev(self):
+        """Retrocede una posicion y devuelve el dato. Si no hay posicion anterior levanta StopIteration"""
         if self.pila_auxiliar.esta_vacia():
             raise StopIteration('No hay elemento previo')
         dato = self.pila_auxiliar.desapilar()
