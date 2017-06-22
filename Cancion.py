@@ -16,8 +16,6 @@ class Cancion():
         """Guarda la cancion, si no recibe una cadena valida levanta ValueError
         Parametros:
             name (string) Nombre del archivo sin extension"""
-        if not name:
-            raise ValueError("Debe indicar el nombre")
         self.tiempos.volver_al_inicio()
         with open(name + ".plp","w") as f:
             f.write("C,"+str(self.cant_tracks())+"\n")
@@ -27,7 +25,6 @@ class Cancion():
             MarcaDeTiempo = self.tiempos.actual()
             while True:
                 try:
-                    print(MarcaDeTiempo.obtener_duracion())
                     if not MarcaDeTiempo.obtener_duracion() == anterior:
                         f.write("T,"+str(MarcaDeTiempo.obtener_duracion())+"\n")
                     anterior = MarcaDeTiempo.obtener_duracion()
@@ -49,10 +46,12 @@ class Cancion():
         except StopIteration:
             return
             
-    def stepm(self,n):
-        """Avanza N marcas de tiempo hacia adelante o las que pueda."""
+    def stepm(self,numero):
+        """Avanza N marcas de tiempo hacia adelante o las que pueda.
+        Parametros:
+            numero (int) Numero de marcas a avanzar"""
         try:
-            for x in range(n):
+            for x in range(numero):
                 self.tiempos.siguiente()
         except StopIteration:
             return
@@ -64,72 +63,76 @@ class Cancion():
         except StopIteration:
             return
 
-    def backm(self,n):
-        """Retrocede N marcas de tiempo hacia atras o las que pueda."""
+    def backm(self,numero):
+        """Retrocede N marcas de tiempo hacia atras o las que pueda.
+        Parametros:
+            numero (int) Numero de marcas a retroceder"""
         try:
-            for x in range(n):
+            for x in range(numero):
                 self.tiempos.anterior()
         except StopIteration:
             return 
 
     def track_add(self,funcion,frecuencia,volumen):
-        """Agrega un track con el sonido indicado."""
+        """Agrega un track con el sonido indicado.
+        Parametros:
+            funcion (string) nombre de la funcion
+            frecuencia (int) frecuencia de onda
+            volumen (float) volumen del sonido comprendido entre 0 y 1"""
         if funcion.lower() not in self.FUNCIONES_DISPONIBLES:
-            print('El sonido introducido no existe')
-            return
-        if volumen > 1 or volumen < 0:
-            print('El volumen no puede tomar un valor mayor a uno ni ser menor que 0')
-            return
-        self.tracks.append(Track(funcion,frecuencia,volumen))
+            raise ValueError('El sonido introducido no existe')
+        self.tracks.append(Track(funcion,int(frecuencia),float(volumen)))
 
     def track_del(self,posicion):
-        """Elimina un track por numero."""
-        try:
-            self.tracks.pop(posicion)
-        except IndexError:
-            print('Este track no se encuentra en la canción')
+        """Elimina un track por numero. Levanta un IndexError si no esta habilitado.
+        Parametros:
+            posicion (int) Posicion a quitar"""
+        self.tracks.pop(posicion)
 
     def mark_add(self,duracion):
         """Agrega una marca de tiempo de la duracion establecida. Originalmente
-        todos los tracks arrancan como deshabilitados"""
-        if not duracion:
-            return
+        todos los tracks estan deshabilitados
+        Parametros:
+            duracion (float) duracion de la marca de tiempo"""
         mark = MarcaDeTiempo(duracion)
         self.tiempos.insert(self.tiempos.posicion_actual(),mark)
         self.tiempos.actualizar()
 
     def mark_add_next(self,duracion):
         """Igual que MARKADD pero la inserta luego de la marca en la cual esta
-        actualmente el cursor"""
-        if not duracion:
-            return
+        actualmente el cursor
+        Parametros:
+            duracion (float) duracion de la marca de tiempo"""
         mark = MarcaDeTiempo(duracion)
         self.tiempos.insert(self.tiempos.posicion_actual()+1,mark)
         self.tiempos.actualizar()
 
     def mark_add_prev(self,duracion):
         """Igual que MARKADD pero la inserta antes de la marca en la cual esta
-        actualmente el cursor"""
-        mark = MarcaDeTiempo(duracion)
-        if not self.tiempos.prim:
-            print('Debe insertar al menos una marca para utilizar esta funcion')
+        actualmente el cursor
+        Parametros:
+            duracion (float) duracion de la marca de tiempo"""
+        if not self.tiempos.posicion_actual():
+            self.mark_add(duracion) # Si se encuentra en la posicion inicial no hay marca previa
             return
-        self.tiempos.insert(self.tiempos.posicion_actual(), mark)
+        mark = MarcaDeTiempo(duracion)
+        self.tiempos.insert(self.tiempos.posicion_actual()-1, mark)
         self.tiempos.actualizar()
 
     def track_on(self,numero):
         """Habilita al track durante la marca de tiempo en la cual esta parada el
-        cursor. Si el track no existe lanza IndexError"""
+        cursor. Si el track no existe lanza IndexError
+        Parametros:
+            numero (int) Numero de track (o posicion)"""
         track = self.tracks[numero] #Para levantar una excepcion si no existe el track
-        print("va a trackon  ")
-        print(self.tiempos.actual().obtener_habilitados())
         if not numero in self.tiempos.actual().obtener_habilitados():
-            print("TRAOK  ",numero) 
             self.tiempos.actual().habilitar_track(numero)
         
     def track_off(self,numero):
         """Deshabilita al track durante la marca de tiempo en la cual esta parada el
-        cursor. Si el track no estaba habilitado, no hace nada."""
+        cursor. Si el track no estaba habilitado, no hace nada.
+        Parametros:
+            numero (int) Numero de track (o posicion)"""
         if numero in self.tiempos.actual().obtener_habilitados():
             self.tiempos.actual().deshabilitar_track(numero)
     
@@ -145,17 +148,21 @@ class Cancion():
             if i != (self.cant_tracks() -1):
                 self.tiempos.siguiente()
 
-    def play_marks(self,n):
-        """Reproduce las proximas n marcas desde la posicion actual del cursor."""
+    def play_marks(self,numero):
+        """Reproduce las proximas n marcas desde la posicion actual del cursor.
+        Parametros:
+            numero (int) Numero de marcas a reproducir"""
         try:
-            for i in range(n):
+            for i in range(numero):
                 self._reproducir(self.tiempos.actual())
                 self.tiempos.siguiente()
         except StopIteration:
             return 
 
     def play_seconds(self,segundos):
-        """Reproduce los proximos segundos la posicion actual del cursor."""
+        """Reproduce los proximos segundos la posicion actual del cursor.
+        Parametros:
+            segundos (int) Segundos de marcas a reproducir"""
         suma_duracion = 0
         while True:
             try:
