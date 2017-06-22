@@ -90,7 +90,7 @@ class Cancion():
         self.tracks.pop(posicion)
 
     def mark_add(self,duracion):
-        """Agrega una marca de tiempo de la duracion establecida. Originalmente
+        """Agrega una marca de tiempo de la duracion indicada. Originalmente
         todos los tracks estan deshabilitados
         Parametros:
             duracion (float) duracion de la marca de tiempo"""
@@ -121,7 +121,7 @@ class Cancion():
 
     def track_on(self,numero):
         """Habilita al track durante la marca de tiempo en la cual esta parada el
-        cursor. Si el track no existe lanza IndexError
+        cursor. Si el track no existe lanza IndexError. Si no hay marca levanta AttributeError.
         Parametros:
             numero (int) Numero de track (o posicion)"""
         track = self.tracks[numero] #Para levantar una excepcion si no existe el track
