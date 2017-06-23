@@ -1,5 +1,4 @@
 from ListaEnlazada import ListaEnlazada
-from ListaEnlazada import _IteradorListaEnlazada
 from MarcaDeTiempo import MarcaDeTiempo
 from Track import Track
 import soundPlayer as pysounds
@@ -16,6 +15,8 @@ class Cancion():
         """Guarda la cancion, si no recibe una cadena valida levanta ValueError
         Parametros:
             name (string) Nombre del archivo sin extension"""
+        if self.tiempos.esta_vacia():
+            return
         self.tiempos.volver_al_inicio()
         with open(name + ".plp","w") as f:
             f.write("C,"+str(self.cant_tracks())+"\n")
@@ -138,15 +139,19 @@ class Cancion():
     
     def play(self):
         """Reproduce la marca en la que se encuentra el cursor actualmente."""
-        self._reproducir(self.tiempos.actual())
+        if not self.tiempos.esta_vacia():
+            self._reproducir(self.tiempos.actual())
 
     def play_all(self):
         """Reproduce la cancion completa desde el inicio."""
         self.tiempos.volver_al_inicio()
-        for i in range (self.cant_tracks()):
-            self._reproducir(self.tiempos.actual())
-            if i != (self.cant_tracks() -1):
+        while True:
+            try:
+                if not self.tiempos.esta_vacia():
+                    self._reproducir(self.tiempos.actual())
                 self.tiempos.siguiente()
+            except StopIteration:
+                return
 
     def play_marks(self,numero):
         """Reproduce las proximas n marcas desde la posicion actual del cursor.
@@ -154,7 +159,8 @@ class Cancion():
             numero (int) Numero de marcas a reproducir"""
         try:
             for i in range(numero):
-                self._reproducir(self.tiempos.actual())
+                if not self.tiempos.esta_vacia():
+                    self._reproducir(self.tiempos.actual())
                 self.tiempos.siguiente()
         except StopIteration:
             return 
@@ -166,7 +172,8 @@ class Cancion():
         suma_duracion = 0
         while True:
             try:
-                self._reproducir(self.tiempos.actual())
+                if not self.tiempos.esta_vacia():
+                    self._reproducir(self.tiempos.actual())
                 suma_duracion += self.tiempos.actual().obtener_duracion()
                 if suma_duracion >= segundos:
                     break
