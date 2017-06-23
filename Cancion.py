@@ -143,7 +143,8 @@ class Cancion():
             self._reproducir(self.tiempos.actual())
 
     def play_all(self):
-        """Reproduce la cancion completa desde el inicio."""
+        """Reproduce la cancion completa desde el inicio. Y vuelve a la posicion actual."""
+        posicion_actual = self.tiempos.posicion_actual()
         self.tiempos.volver_al_inicio()
         while True:
             try:
@@ -151,25 +152,29 @@ class Cancion():
                     self._reproducir(self.tiempos.actual())
                 self.tiempos.siguiente()
             except StopIteration:
-                return
+                self.tiempos.volver_al_inicio()
+                self.tiempos.actualizar(posicion_actual)
 
     def play_marks(self,numero):
-        """Reproduce las proximas n marcas desde la posicion actual del cursor.
+        """Reproduce las proximas n marcas desde la posicion actual del cursor. Y vuelve a la posicion actual.
         Parametros:
             numero (int) Numero de marcas a reproducir"""
+        posicion_actual = self.tiempos.posicion_actual()
         try:
             for i in range(numero):
                 if not self.tiempos.esta_vacia():
                     self._reproducir(self.tiempos.actual())
                 self.tiempos.siguiente()
         except StopIteration:
-            return 
+            self.tiempos.volver_al_inicio()
+            self.tiempos.actualizar(posicion_actual) 
 
     def play_seconds(self,segundos):
-        """Reproduce los proximos segundos la posicion actual del cursor.
+        """Reproduce los proximos segundos la posicion actual del cursor. Y vuelve a la posicion actual.
         Parametros:
             segundos (int) Segundos de marcas a reproducir"""
         suma_duracion = 0
+        posicion_actual = self.tiempos.posicion_actual()
         while True:
             try:
                 if not self.tiempos.esta_vacia():
@@ -179,7 +184,8 @@ class Cancion():
                     break
                 self.tiempos.siguiente()
             except StopIteration:
-                break
+                self.tiempos.volver_al_inicio()
+                self.tiempos.actualizar(posicion_actual)
         
     def cant_tracks(self):
         """Obtiene la cantidad de tracks cargados"""
