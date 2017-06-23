@@ -154,6 +154,7 @@ class Cancion():
             except StopIteration:
                 self.tiempos.volver_al_inicio()
                 self.tiempos.actualizar(posicion_actual)
+                return
 
     def play_marks(self,numero):
         """Reproduce las proximas n marcas desde la posicion actual del cursor. Y vuelve a la posicion actual.
@@ -166,8 +167,9 @@ class Cancion():
                     self._reproducir(self.tiempos.actual())
                 self.tiempos.siguiente()
         except StopIteration:
-            self.tiempos.volver_al_inicio()
-            self.tiempos.actualizar(posicion_actual) 
+            pass
+        self.tiempos.volver_al_inicio()
+        self.tiempos.actualizar(posicion_actual) 
 
     def play_seconds(self,segundos):
         """Reproduce los proximos segundos la posicion actual del cursor. Y vuelve a la posicion actual.
@@ -184,8 +186,9 @@ class Cancion():
                     break
                 self.tiempos.siguiente()
             except StopIteration:
-                self.tiempos.volver_al_inicio()
-                self.tiempos.actualizar(posicion_actual)
+                break
+        self.tiempos.volver_al_inicio()
+        self.tiempos.actualizar(posicion_actual)
         
     def cant_tracks(self):
         """Obtiene la cantidad de tracks cargados"""
