@@ -2,7 +2,7 @@ class Track():
     """Representa un track de una cancion"""
     def __init__(self,tipo,frecuencia,volumen):
         """Constructor de la clase"""
-        self.tipo = str(tipo)
+        self.tipo = str(tipo).lower()
         self.frecuencia = int(frecuencia)
         self.volumen = float(volumen)
 
