@@ -7,8 +7,8 @@ class _IteradorListaEnlazada():
         self.pila_auxiliar = Pila()
         self.posicion = 0
     def next(self):
-        """Avanza una posicion y devuelve el dato. Si no hay posicion siguiente levanta StopIteration"""
-        if self.actual.prox is None:
+        """Avanza una posicion y devuelve el dato. Si no hay posicion siguiente lanza una excepcion StopIteration. Si no hay elemento lanza una excepcion AttributeError."""
+        if not self.actual.prox:
             raise StopIteration('No hay más elementos en la lista')
         dato = self.actual
         self.pila_auxiliar.apilar(dato)
@@ -16,7 +16,7 @@ class _IteradorListaEnlazada():
         self.posicion += 1
         return self.actual.dato
     def prev(self):
-        """Retrocede una posicion y devuelve el dato. Si no hay posicion anterior levanta StopIteration"""
+        """Retrocede una posicion y devuelve el dato. Si no hay posicion anterior lanza una excepcion StopIteration. Si no hay elemento lanza una excepcion AttributeError."""
         if self.pila_auxiliar.esta_vacia():
             raise StopIteration('No hay elemento previo')
         dato = self.pila_auxiliar.desapilar()
@@ -33,7 +33,7 @@ class ListaEnlazada():
     
     def pop(self, posicion = None):
         """ Elimina el nodo y devuelve el dato contenido.
-        Si está fuera de rango, se levanta la excepción IndexError.
+        Si está fuera de rango, se lanza una excepcion IndexError.
         Si no se recibe la posición, devuelve el último elemento."""
         if not posicion:
             posicion = self.len - 1
@@ -69,7 +69,7 @@ class ListaEnlazada():
         
     def insert(self, posicion, dato):
         """Inserta el dato en la posición indicada.
-        Si la posición es inválida, levanta IndexError"""
+        Si la posición es inválida, lanza una excepcion IndexError"""
         if posicion < 0 or posicion > self.len:
             raise IndexError("Posición inválida")
         nuevo = _Nodo(dato)
@@ -85,23 +85,29 @@ class ListaEnlazada():
         self.len += 1
 
     def esta_vacia(self):
-        """Devuelve el largo de la lista enlazada (cantidad de nodos)"""
-        return self.len == 0
+        """Devuelve true si la lista no tiene ningun elemento"""
+        return (self.len == 0)
 
     def obtener_iterador(self):
         """ Devuelve el iterador de la lista. """
         return _IteradorListaEnlazada(self.prim)
 
     def siguiente(self):
-        """Avanza al siguiente elemento y lo devuelve"""
-        return self.iterador.next()
+        """Avanza al siguiente elemento y lo devuelve. Si no hay marca o es la ultima, lanza una excepcion StopIteration"""
+        try:
+            return self.iterador.next()
+        except AttributeError:
+            raise StopIteration 
     
     def anterior(self):
-        """Retrocede al anterior elemento y lo devuelve"""
-        return self.iterador.prev()
+        """Retrocede al anterior elemento y lo devuelve.  Si no hay marca o es la primera, lanza una excepcion StopIteration"""
+        try:
+            return self.iterador.prev()
+        except AttributeError:
+            raise StopIteration 
 
     def actual(self):
-        """Devuelve el dato en la posicion actual del iterador"""
+        """Devuelve el dato en la posicion actual del iterador. Si hay elemento, lanza una excepcion AttributeError."""
         return self.iterador.actual.dato
 
     def volver_al_inicio(self):
