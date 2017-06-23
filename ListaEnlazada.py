@@ -83,7 +83,11 @@ class ListaEnlazada():
             nuevo.prox = n_ant.prox
             n_ant.prox = nuevo
         self.len += 1
-        
+
+    def esta_vacia(self):
+        """Devuelve el largo de la lista enlazada (cantidad de nodos)"""
+        return self.len == 0
+
     def obtener_iterador(self):
         """ Devuelve el iterador de la lista. """
         return _IteradorListaEnlazada(self.prim)
@@ -97,7 +101,7 @@ class ListaEnlazada():
         return self.iterador.prev()
 
     def actual(self):
-        """ Devuelve el dato en la posicion actual del iterador"""
+        """Devuelve el dato en la posicion actual del iterador"""
         return self.iterador.actual.dato
 
     def volver_al_inicio(self):
@@ -121,5 +125,3 @@ class _Nodo():
     def __init__(self, dato, prox = None):
         self.dato = dato
         self.prox = prox
-    def __str__(self):
-        return str(self.dato)
