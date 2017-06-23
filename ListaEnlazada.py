@@ -10,8 +10,8 @@ class _IteradorListaEnlazada():
         """Avanza una posicion y devuelve el dato. Si no hay posicion siguiente lanza una excepcion StopIteration. Si no hay elemento lanza una excepcion AttributeError."""
         if not self.actual.prox:
             raise StopIteration('No hay más elementos en la lista')
-        dato = self.actual
-        self.pila_auxiliar.apilar(dato)
+        nodo = self.actual
+        self.pila_auxiliar.apilar(nodo)
         self.actual = self.actual.prox
         self.posicion += 1
         return self.actual.dato
@@ -19,8 +19,8 @@ class _IteradorListaEnlazada():
         """Retrocede una posicion y devuelve el dato. Si no hay posicion anterior lanza una excepcion StopIteration. Si no hay elemento lanza una excepcion AttributeError."""
         if self.pila_auxiliar.esta_vacia():
             raise StopIteration('No hay elemento previo')
-        dato = self.pila_auxiliar.desapilar()
-        self.actual = dato
+        nodo = self.pila_auxiliar.desapilar()
+        self.actual = nodo
         self.posicion -= 1
         return self.actual.dato
             
@@ -58,9 +58,9 @@ class ListaEnlazada():
         nuevo = _Nodo(dato)
         if self.len == 0:
             self.prim = nuevo
-        if self.len == 1:
+        elif self.len == 1:
             self.prim.prox = nuevo
-        if self.len != 0 and self.len != 1:
+        else:
             n_act = self.prim
             for pos in range(1,self.len):
                 n_act = n_act.prox
@@ -128,6 +128,7 @@ class ListaEnlazada():
         return self.iterador.posicion
 
 class _Nodo():
+    """Un nodo contiene un dato y una referencia al proximo"""
     def __init__(self, dato, prox = None):
         self.dato = dato
         self.prox = prox
