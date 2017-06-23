@@ -138,12 +138,12 @@ class Cancion():
             self.tiempos.actual().deshabilitar_track(numero)
     
     def play(self):
-        """Reproduce la marca en la que se encuentra el cursor actualmente."""
+        """Reproduce la marca en la que se encuentra el cursor actualmente. Si no hay marca no hace nada."""
         if not self.tiempos.esta_vacia():
             self._reproducir(self.tiempos.actual())
 
     def play_all(self):
-        """Reproduce la cancion completa desde el inicio. Y vuelve a la posicion actual."""
+        """Reproduce la cancion completa desde el inicio. Y vuelve a la posicion actual. Si no hay marca no hace nada."""
         posicion_actual = self.tiempos.posicion_actual()
         self.tiempos.volver_al_inicio()
         while True:
@@ -157,7 +157,7 @@ class Cancion():
                 return
 
     def play_marks(self,numero):
-        """Reproduce las proximas n marcas desde la posicion actual del cursor. Y vuelve a la posicion actual.
+        """Reproduce las proximas n marcas desde la posicion actual del cursor. Y vuelve a la posicion actual. Si no hay marca no hace nada.
         Parametros:
             numero (int) Numero de marcas a reproducir"""
         posicion_actual = self.tiempos.posicion_actual()
@@ -172,7 +172,7 @@ class Cancion():
         self.tiempos.actualizar(posicion_actual) 
 
     def play_seconds(self,segundos):
-        """Reproduce los proximos segundos la posicion actual del cursor. Y vuelve a la posicion actual.
+        """Reproduce los proximos segundos la posicion actual del cursor. Y vuelve a la posicion actual. Si no hay marca no hace nada.
         Parametros:
             segundos (int) Segundos de marcas a reproducir"""
         suma_duracion = 0
@@ -181,7 +181,7 @@ class Cancion():
             try:
                 if not self.tiempos.esta_vacia():
                     self._reproducir(self.tiempos.actual())
-                suma_duracion += self.tiempos.actual().obtener_duracion()
+                    suma_duracion += self.tiempos.actual().obtener_duracion()
                 if suma_duracion >= segundos:
                     break
                 self.tiempos.siguiente()
