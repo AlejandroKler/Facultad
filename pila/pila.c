@@ -46,8 +46,8 @@ bool pila_apilar(pila_t *pila, void* valor){
 	pila->cantidad++;
 	return true
 }
-bool pila_modificar(pila_t *pila, int tamaño){
-	return !(bool) realloc(pila->datos,sizeof(void) * tamaño);
+bool pila_modificar(pila_t *pila, int capacidad){
+	return !(bool) realloc(pila->datos,sizeof(void) * capacidad);
 }
 void* pila_ver_tope(const pila_t *pila){
 	if (!pila->cantidad) return NULL;
