@@ -22,14 +22,17 @@ struct pila {
 pila_t* pila_crear(void){
 	pila_t* pila = malloc(sizeof(pila_t));
 	if (!pila) return NULL;
-	pila->datos = malloc(sizeof(void));
+	pila->datos = malloc(sizeof(void) * 2);
 	if (!pila->datos) {
 		free(pila);
 		return NULL;
 	}
-	pila->capacidad = 1;
+	pila->capacidad = 2;
 	pila->cantidad = 0;
 	return pila;
+}
+bool pila_modificar(pila_t *pila, int capacidad){
+	return !(bool) realloc(pila->datos,sizeof(void) * capacidad);
 }
 void pila_destruir(pila_t *pila){
 	free(pila->datos);
@@ -40,14 +43,11 @@ bool pila_esta_vacia(const pila_t *pila){
 }
 bool pila_apilar(pila_t *pila, void* valor){
 	if (pila->cantidad == pila->capacidad){
-		if (!pila_modificar(pila,pila->capacidad*2)) return false; //Incrementamos su capacidad
+		if (!pila_modificar(pila,(int)pila->capacidad * 2)) return false; //Incrementamos su capacidad
 	}
 	pila->datos[pila->cantidad] = valor; //Agregamos en el proximo lugar
 	pila->cantidad++;
-	return true
-}
-bool pila_modificar(pila_t *pila, int capacidad){
-	return !(bool) realloc(pila->datos,sizeof(void) * capacidad);
+	return true;
 }
 void* pila_ver_tope(const pila_t *pila){
 	if (!pila->cantidad) return NULL;
@@ -56,9 +56,9 @@ void* pila_ver_tope(const pila_t *pila){
 void* pila_desapilar(pila_t *pila){
 	if (!pila->cantidad) return NULL;
 	if (pila->cantidad == pila->capacidad/4){
-		if (!pila_modificar(pila,pila->capacidad/2)) return false; //Decrementamos su capacidad
+		if (!pila_modificar(pila,(int)pila->capacidad/2)) return false; //Decrementamos su capacidad
 	}
-	valor = pila->datos[pila->cantidad - 1];
+	void* valor = pila->datos[pila->cantidad - 1];
 	pila->cantidad--;
 	return valor;
 }
